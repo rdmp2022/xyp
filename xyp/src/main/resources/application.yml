@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: xyp
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://43.138.69.76:3306/xyp
+    username: root
+    password: xyp123123
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 80000
+      cookie:
+        domain: localhost
+    context-path: /api
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+
