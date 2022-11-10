@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxu.xyp.mapper.LabelsMapper">
+
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Labels">
+            <id property="label_id" column="label_id" jdbcType="BIGINT"/>
+            <result property="label_name" column="label_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        label_id,label_name
+    </sql>
+</mapper>

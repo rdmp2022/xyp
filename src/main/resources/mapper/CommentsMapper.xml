@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxu.xyp.mapper.CommentsMapper">
+
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Comments">
+            <id property="comment_id" column="comment_id" jdbcType="BIGINT"/>
+            <result property="user_id" column="user_id" jdbcType="BIGINT"/>
+            <result property="article_id" column="article_id" jdbcType="BIGINT"/>
+            <result property="comment_date" column="comment_date" jdbcType="TIMESTAMP"/>
+            <result property="comment_content" column="comment_content" jdbcType="VARCHAR"/>
+            <result property="parent_comment_id" column="parent_comment_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id,user_id,article_id,
+        comment_date,comment_content,parent_comment_id
+    </sql>
+</mapper>
