@@ -106,6 +106,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @param user
      * @return
      */
+
+    //1.
     @Override
     public User getSafetyUser(User user) {
         User safetyUser = new User();
