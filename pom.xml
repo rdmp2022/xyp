@@ -111,6 +111,13 @@
                 <configuration>
                     <mainClass>com.sxu.xyp.XypApplication</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
