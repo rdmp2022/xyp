@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
+import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
@@ -65,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("user_account", userAccount).or().eq("email",email);
         int count = this.count(queryWrapper);
         if (count > 0){
-            return 0;
+            return 999;
             //throw new BusinessException(ErrorCode.PARAMS_ERROR, "存在相同账号或者邮箱");
         }
         //加盐存数据库
@@ -79,7 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest) {
+    public BaseResponse<User> userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest) {
         if (StrUtil.hasBlank(userAccount, userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
@@ -95,13 +97,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("user_account", userAccount).or().eq("email",userAccount);
         queryWrapper.eq("user_password", encryptPassword);
         if (this.count(queryWrapper) == 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
+            System.out.println("-----------------------------");
+            return new BaseResponse<User>(400,null,"账号(邮箱)或密码错误","");
+            //throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
         }
         User user = userMapper.selectOne(queryWrapper);
         User safetyUser = getSafetyUser(user);
         //登录态存入session
         httpServletRequest.getSession().setAttribute(LOGIN_STATUS, safetyUser);
-        return safetyUser;
+        return ResultUtil.success(user);
     }
 
 

@@ -1,5 +1,6 @@
 package com.sxu.xyp.service;
 
+import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,7 +15,7 @@ public interface UserService extends IService<User> {
 
     long userRegister(String userAccount, String email,String userPassword, String checkPassword);
 
-    User userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest);
+    BaseResponse<User> userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest);
 
     User getSafetyUser(User user);
 

@@ -42,8 +42,7 @@ public class UserController {
         }
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
-        User user = userService.userLogin(userAccount, userPassword, httpServletRequest);
-        return ResultUtil.success(user);
+        return userService.userLogin(userAccount, userPassword, httpServletRequest);
     }
 
 
