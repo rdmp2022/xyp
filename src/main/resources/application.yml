@@ -2,9 +2,9 @@ spring:
   application:
     name: xyp
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://43.138.69.76:3306/xyp
-    username: root
+    username: xyp
     password: xyp123123
 
 #  datasource:
