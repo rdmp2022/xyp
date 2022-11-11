@@ -57,12 +57,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!userPassword.equals(checkPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入密码必须相同");
         }
+        if (userAccount == email){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号和邮箱不能重复");
+        }
         //账号不能重复
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_account", userAccount);
+        queryWrapper.eq("user_account", userAccount).or().eq("email",email);
         int count = this.count(queryWrapper);
         if (count > 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "存在相同账号");
+            return 0;
+            //throw new BusinessException(ErrorCode.PARAMS_ERROR, "存在相同账号或者邮箱");
         }
         //加盐存数据库
         String encryptPassword = DigestUtil.md5Hex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
@@ -88,10 +92,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //数据库
         String encryptPassword = DigestUtil.md5Hex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_account", userAccount);
+        queryWrapper.eq("user_account", userAccount).or().eq("email",userAccount);
         queryWrapper.eq("user_password", encryptPassword);
         if (this.count(queryWrapper) == 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码错误");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
         }
         User user = userMapper.selectOne(queryWrapper);
         User safetyUser = getSafetyUser(user);
