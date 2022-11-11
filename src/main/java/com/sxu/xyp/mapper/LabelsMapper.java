@@ -1,0 +1,18 @@
+package com.sxu.xyp.mapper;
+
+import com.sxu.xyp.model.domain.Labels;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+/**
+* @author 86187
+* @description 针对表【labels(标签表)】的数据库操作Mapper
+* @createDate 2022-11-11 01:08:22
+* @Entity com.sxu.xyp.model.domain.Labels
+*/
+public interface LabelsMapper extends BaseMapper<Labels> {
+
+}
+
+
+
+
