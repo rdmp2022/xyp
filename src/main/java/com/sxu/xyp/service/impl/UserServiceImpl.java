@@ -1,8 +1,10 @@
 package com.sxu.xyp.service.impl;
-import java.util.Date;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
@@ -10,11 +12,14 @@ import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
 import com.sxu.xyp.mapper.UserMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static com.sxu.xyp.constant.UserConstant.LOGIN_STATUS;
 import static com.sxu.xyp.constant.UserConstant.SALT;
@@ -30,6 +35,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用户注册
@@ -75,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest) {
+    public String userLogin(String userAccount, String userPassword) {
         if (StrUtil.hasBlank(userAccount, userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
@@ -95,11 +103,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         User user = userMapper.selectOne(queryWrapper);
         User safetyUser = getSafetyUser(user);
-        //登录态存入session
-        httpServletRequest.getSession().setAttribute(LOGIN_STATUS, safetyUser);
-        return safetyUser;
+        //登录成功，将生成的token存入redis中
+        String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
+        redisTemplate.opsForValue().set("user:login:" + token, JSONUtil.toJsonStr(safetyUser), Duration.ofHours(1));
+        return token;
     }
-
 
     /**
      * 脱敏

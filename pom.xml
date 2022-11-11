@@ -6,7 +6,7 @@
     <artifactId>xyp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>xyp</name>
-    <description>Demo project for Spring Boot</description>
+    <description>科研训练项目</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -26,6 +26,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -34,7 +35,18 @@
             <version>3.4.2</version>
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>2.6.3</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

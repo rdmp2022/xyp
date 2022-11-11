@@ -4,23 +4,25 @@ import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
-import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.model.request.LoginRequest;
 import com.sxu.xyp.model.request.RegisterRequest;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = {"http://localhost:3579"})
+@CrossOrigin()
 @Api(value = "用户API")
 public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody RegisterRequest registerRequest) {
@@ -36,15 +38,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<User> userLogin(@RequestBody LoginRequest loginRequest, HttpServletRequest httpServletRequest) {
+    public BaseResponse<String> userLogin(@RequestBody LoginRequest loginRequest) {
         if (loginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
-        User user = userService.userLogin(userAccount, userPassword, httpServletRequest);
-        return ResultUtil.success(user);
+        String token = userService.userLogin(userAccount, userPassword);
+        return ResultUtil.success(token);
     }
-
-
 }

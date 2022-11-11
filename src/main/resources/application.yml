@@ -6,6 +6,15 @@ spring:
     url: jdbc:mysql://43.138.69.76:3306/xyp
     username: xyp
     password: xyp123123
+  redis:
+    host: 43.138.69.76
+    port: 6379
+    password: xyp123123
+    database: 1
+  session:
+    store-type: redis
+    timeout: 86400
+
 
 #  datasource:
 #    username: root
@@ -16,13 +25,11 @@ spring:
 server:
   port: 8080
   servlet:
+    context-path: /api
     session:
-      timeout: 80000
       cookie:
         domain: localhost
-    context-path: /api
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false
-
