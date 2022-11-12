@@ -1,11 +1,11 @@
 spring:
   application:
     name: xyp
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://43.138.69.76:3306/xyp
-#    username: xyp
-#    password: xyp123123
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://43.138.69.76:3306/xyp
+    username: xyp
+    password: xyp123123
   redis:
     host: 43.138.69.76
     port: 6379
@@ -14,11 +14,7 @@ spring:
   session:
     store-type: redis
     timeout: 86400
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/xyp?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
+
 
 server:
   port: 8080
