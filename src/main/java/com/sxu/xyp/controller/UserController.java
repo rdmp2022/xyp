@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin()
+@CrossOrigin(origins = "*")
 @Api(value = "用户API")
 public class UserController {
 
