@@ -50,24 +50,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public long userRegister(String userAccount, String email,String userPassword, String checkPassword) {
         //参数校验可以前端提前校验
         //不可包含特殊字符也可前端处理
-        if (StrUtil.hasBlank(userAccount, email,userPassword, checkPassword)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
-        }
-        if (userAccount.length() < 4){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度不能少于4");
-        }
-        if (email.length() < 4){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱长度不能少于8");
-        }
-        if (userPassword.length() < 8){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能少于8");
-        }
+//        if (StrUtil.hasBlank(userAccount, email,userPassword, checkPassword)){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+//        }
+//        if (userAccount.length() < 4){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度不能少于4");
+//        }
+//        if (email.length() < 4){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱长度不能少于8");
+//        }
+//        if (userPassword.length() < 8){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能少于8");
+//        }
         if (!userPassword.equals(checkPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入密码必须相同");
         }
+        if (userAccount.equals(email)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号和邮箱不能相同");
+        }
         //账号不能重复
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_account", userAccount);
+        queryWrapper.eq("user_account", userAccount).or().eq("email",email);
         int count = this.count(queryWrapper);
         if (count > 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "存在相同账号");
@@ -96,10 +99,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //数据库
         String encryptPassword = DigestUtil.md5Hex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_account", userAccount);
+        queryWrapper.eq("user_account", userAccount).or().eq("email",userAccount);
         queryWrapper.eq("user_password", encryptPassword);
         if (this.count(queryWrapper) == 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码错误");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
         }
         User user = userMapper.selectOne(queryWrapper);
         User safetyUser = getSafetyUser(user);
