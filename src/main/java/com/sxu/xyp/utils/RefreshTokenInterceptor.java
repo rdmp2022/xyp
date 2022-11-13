@@ -6,6 +6,7 @@ import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -21,9 +22,11 @@ import static com.sxu.xyp.constant.UserConstant.LOGIN_USER_TTL;
 @Configuration
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
+    public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+    }
     @Resource
     private UserService userService;
 
@@ -36,7 +39,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         }
         // 2.基于TOKEN获取redis中的用户
         String key  = LOGIN_USER_KEY + token;
-        String userJsonStr = (String) redisTemplate.opsForValue().get(key);
+        String userJsonStr = stringRedisTemplate.opsForValue().get(key);
         // 3.判断用户是否存在
         if (StrUtil.isBlank(userJsonStr)) {
             return true;
@@ -46,7 +49,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         // 6.存在，保存用户信息到 ThreadLocal
         UserHolder.saveUser(safetyUser);
         // 7.刷新token有效期
-        redisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
         // 8.放行
         return true;
     }
