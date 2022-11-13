@@ -48,4 +48,8 @@ public class UserController {
         return ResultUtil.success(token);
     }
 
+    @GetMapping("/test")
+    public BaseResponse<String> testGet(){
+        return ResultUtil.success("get成功");
+    }
 }
