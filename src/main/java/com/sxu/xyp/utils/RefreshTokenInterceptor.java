@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static com.sxu.xyp.constant.UserConstant.LOGIN_USER_KEY;
 import static com.sxu.xyp.constant.UserConstant.LOGIN_USER_TTL;
 
+@Configuration
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     @Resource

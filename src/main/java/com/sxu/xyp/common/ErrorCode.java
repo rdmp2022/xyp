@@ -1,7 +1,7 @@
 package com.sxu.xyp.common;
 
 public enum ErrorCode {
-    SUCCESS(0, "成功", ""),
+    SUCCESS(200, "成功", ""),
     PARAMS_ERROR(30000, "请求参数错误", ""),
     NULL_ERROR(30001, "请求数据为空", ""),
     ROLE_ERROR(30002, "权限错误", ""),

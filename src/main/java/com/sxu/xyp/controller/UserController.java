@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 @Api(value = "用户API")
 public class UserController {
 
@@ -47,4 +47,5 @@ public class UserController {
         String token = userService.userLogin(userAccount, userPassword);
         return ResultUtil.success(token);
     }
+
 }
