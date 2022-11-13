@@ -10,6 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
+import com.sxu.xyp.common.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
@@ -89,27 +90,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (StrUtil.hasBlank(userAccount, userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        if (userAccount.length() < 4){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度不能少于4");
-        }
-        if (userPassword.length() < 8){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能少于8");
-        }
+//        if (userAccount.length() < 4){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度不能少于4");
+//        }
+//        if (userPassword.length() < 8){
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能少于8");
+//        }
         //数据库
         String encryptPassword = DigestUtil.md5Hex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_account", userAccount).or().eq("email",userAccount);
+//        queryWrapper.eq("user_account", userAccount)
+//                    .or()
+//                    .eq("email", userAccount);
+        queryWrapper.and(wrapper -> wrapper.eq("user_account", userAccount).or().eq("email",userAccount));
         queryWrapper.eq("user_password", encryptPassword);
         if (this.count(queryWrapper) == 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
         }
         User user = userMapper.selectOne(queryWrapper);
-        User safetyUser = getSafetyUser(user);
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
         //登录成功，将生成的token存入redis中
         String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
         //存储
         String tokenKey = LOGIN_USER_KEY + token;
-        redisTemplate.opsForValue().set(tokenKey, JSONUtil.toJsonStr(safetyUser));
+        redisTemplate.opsForValue().set(tokenKey, JSONUtil.toJsonStr(userDTO));
         //设置token有效期
         redisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
         return token;
@@ -121,8 +125,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @return
      */
 
-    //1.
-    @Override
+
+    /*@Override
     public User getSafetyUser(User user) {
         User safetyUser = new User();
         safetyUser.setUserId(user.getUserId());
@@ -139,7 +143,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setIsDelete(user.getIsDelete());
         safetyUser.setUserRole(user.getUserRole());
         return safetyUser;
-    }
+    }*/
 
 
 }

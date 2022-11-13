@@ -1,13 +1,13 @@
 package com.sxu.xyp.utils;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.sxu.xyp.model.domain.User;
+import com.sxu.xyp.common.UserDTO;
 import com.sxu.xyp.service.UserService;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
@@ -27,6 +27,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
+
     @Resource
     private UserService userService;
 
@@ -45,9 +46,9 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
             return true;
         }
         User user = JSONUtil.toBean(userJsonStr, User.class);
-        User safetyUser = userService.getSafetyUser(user);
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
         // 6.存在，保存用户信息到 ThreadLocal
-        UserHolder.saveUser(safetyUser);
+        UserHolder.saveUser(userDTO);
         // 7.刷新token有效期
         stringRedisTemplate.expire(key, LOGIN_USER_TTL, TimeUnit.MINUTES);
         // 8.放行
