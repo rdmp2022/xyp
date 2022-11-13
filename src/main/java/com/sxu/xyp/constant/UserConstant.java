@@ -6,6 +6,8 @@ public class UserConstant {
      */
     public static final String SALT = "SXUxyp";
 
-    public static final String LOGIN_STATUS = "userLogin";
+    public static final String LOGIN_USER_KEY = "login:user:key:";
+
+    public static final Long LOGIN_USER_TTL = 30L;
 
 }

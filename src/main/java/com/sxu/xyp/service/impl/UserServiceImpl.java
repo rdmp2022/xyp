@@ -1,5 +1,7 @@
 package com.sxu.xyp.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -16,13 +18,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.sxu.xyp.constant.UserConstant.LOGIN_STATUS;
-import static com.sxu.xyp.constant.UserConstant.SALT;
+import static com.sxu.xyp.constant.UserConstant.*;
 
 /**
 * @author DELL
@@ -108,7 +110,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User safetyUser = getSafetyUser(user);
         //登录成功，将生成的token存入redis中
         String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
-        redisTemplate.opsForValue().set("user:login:" + token, JSONUtil.toJsonStr(safetyUser), Duration.ofHours(1));
+        //存储
+        String tokenKey = LOGIN_USER_KEY + token;
+        redisTemplate.opsForValue().set(tokenKey, JSONUtil.toJsonStr(safetyUser));
+        //设置token有效期
+        redisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
         return token;
     }
 
