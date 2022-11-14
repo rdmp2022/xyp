@@ -5,8 +5,8 @@
 <mapper namespace="com.sxu.xyp.mapper.FavortiesMapper">
 
     <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Favorties">
-            <id property="user_id" column="user_id" jdbcType="BIGINT"/>
-            <result property="article_id" column="article_id" jdbcType="BIGINT"/>
+            <id property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="articleId" column="article_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

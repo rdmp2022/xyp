@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author 86187
 * @description 针对表【favorties(用户-收藏表)】的数据库操作Service实现
-* @createDate 2022-11-11 01:11:34
+* @createDate 2022-11-14 21:58:30
 */
 @Service
 public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties>

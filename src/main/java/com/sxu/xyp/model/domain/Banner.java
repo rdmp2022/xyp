@@ -1,4 +1,4 @@
-package com.sxu.xyp.model.domain.index;
+package com.sxu.xyp.model.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -15,18 +15,20 @@ public class Banner implements Serializable {
     /**
      * 轮播图ID
      */
-    @TableId
-    private Long banner_id;
+    @TableId(value = "banner_id")
+    private Long bannerId;
 
     /**
      * 轮播图url
      */
-    private String banner_url;
+    @TableField(value = "banner_url")
+    private String bannerUrl;
 
     /**
      * 是否展示 ：1 展示， 0 不展示
      */
-    private Integer is_show;
+    @TableField(value = "is_show")
+    private Integer isShow;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -34,42 +36,42 @@ public class Banner implements Serializable {
     /**
      * 轮播图ID
      */
-    public Long getBanner_id() {
-        return banner_id;
+    public Long getBannerId() {
+        return bannerId;
     }
 
     /**
      * 轮播图ID
      */
-    public void setBanner_id(Long banner_id) {
-        this.banner_id = banner_id;
+    public void setBannerId(Long bannerId) {
+        this.bannerId = bannerId;
     }
 
     /**
      * 轮播图url
      */
-    public String getBanner_url() {
-        return banner_url;
+    public String getBannerUrl() {
+        return bannerUrl;
     }
 
     /**
      * 轮播图url
      */
-    public void setBanner_url(String banner_url) {
-        this.banner_url = banner_url;
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
     }
 
     /**
      * 是否展示 ：1 展示， 0 不展示
      */
-    public Integer getIs_show() {
-        return is_show;
+    public Integer getIsShow() {
+        return isShow;
     }
 
     /**
      * 是否展示 ：1 展示， 0 不展示
      */
-    public void setIs_show(Integer is_show) {
-        this.is_show = is_show;
+    public void setIsShow(Integer isShow) {
+        this.isShow = isShow;
     }
 }

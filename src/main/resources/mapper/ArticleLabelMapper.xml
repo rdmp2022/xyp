@@ -5,8 +5,8 @@
 <mapper namespace="com.sxu.xyp.mapper.ArticleLabelMapper">
 
     <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.ArticleLabel">
-            <id property="article_id" column="article_id" jdbcType="BIGINT"/>
-            <result property="label_id" column="label_id" jdbcType="BIGINT"/>
+            <id property="articleId" column="article_id" jdbcType="BIGINT"/>
+            <result property="labelId" column="label_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

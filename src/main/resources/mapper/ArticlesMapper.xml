@@ -5,16 +5,16 @@
 <mapper namespace="com.sxu.xyp.mapper.ArticlesMapper">
 
     <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Articles">
-            <id property="article_id" column="article_id" jdbcType="BIGINT"/>
-            <result property="user_id" column="user_id" jdbcType="BIGINT"/>
+            <id property="articleId" column="article_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="summary" column="summary" jdbcType="VARCHAR"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>
             <result property="views" column="views" jdbcType="BIGINT"/>
-            <result property="comment_count" column="comment_count" jdbcType="BIGINT"/>
-            <result property="favorites_count" column="favorites_count" jdbcType="BIGINT"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="commentCount" column="comment_count" jdbcType="BIGINT"/>
+            <result property="favoritesCount" column="favorites_count" jdbcType="BIGINT"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

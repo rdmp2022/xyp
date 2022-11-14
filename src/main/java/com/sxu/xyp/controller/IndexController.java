@@ -1,9 +1,10 @@
 package com.sxu.xyp.controller;
 
+
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
-import com.sxu.xyp.mapper.BannerMapper;
-import com.sxu.xyp.model.domain.index.Banner;
+
+import com.sxu.xyp.model.domain.Banner;
 import com.sxu.xyp.service.BannerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
