@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-11-11 01:08:22
 */
 public interface LabelsService extends IService<Labels> {
-
+    int addLabel(String label);
 }
