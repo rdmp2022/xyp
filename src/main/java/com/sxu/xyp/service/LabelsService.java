@@ -1,6 +1,6 @@
 package com.sxu.xyp.service;
 
-import com.sxu.xyp.model.domain.index.Labels;
+import com.sxu.xyp.model.domain.Labels;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

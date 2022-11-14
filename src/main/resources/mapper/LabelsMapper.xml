@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxu.xyp.mapper.LabelsMapper">
 
-    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.index.Labels">
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Labels">
             <id property="labelId" column="label_id" jdbcType="BIGINT"/>
             <result property="labelName" column="label_name" jdbcType="VARCHAR"/>
     </resultMap>
