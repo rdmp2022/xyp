@@ -90,19 +90,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (StrUtil.hasBlank(userAccount, userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-//        if (userAccount.length() < 4){
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度不能少于4");
-//        }
-//        if (userPassword.length() < 8){
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能少于8");
-//        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.and(wrapper -> wrapper.eq("user_account", userAccount).or().eq("email",userAccount));
+        if (this.count(queryWrapper) == 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)不存在");
+        }
         //数据库
         String encryptPassword = DigestUtil.md5Hex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("user_account", userAccount)
-//                    .or()
-//                    .eq("email", userAccount);
-        queryWrapper.and(wrapper -> wrapper.eq("user_account", userAccount).or().eq("email",userAccount));
         queryWrapper.eq("user_password", encryptPassword);
         if (this.count(queryWrapper) == 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号(邮箱)或密码错误");
