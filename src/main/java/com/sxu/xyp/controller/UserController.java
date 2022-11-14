@@ -50,6 +50,6 @@ public class UserController {
 
     @GetMapping("/test")
     public BaseResponse<String> testGet(){
-        return ResultUtil.success("get成功");
+        return ResultUtil.success("get成功jenkins***");
     }
 }
