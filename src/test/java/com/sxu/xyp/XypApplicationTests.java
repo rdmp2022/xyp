@@ -1,6 +1,7 @@
 package com.sxu.xyp;
 
 import com.sxu.xyp.mapper.UserMapper;
+import com.sxu.xyp.service.LabelsService;
 import com.sxu.xyp.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,13 +22,16 @@ class XypApplicationTests {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    LabelsService labelsService;
+
     @Test
     void contextLoads() {
     }
 
     @Test
     void testRegister(){
-        System.out.println(userMapper.selectList(null));
+        System.out.println(labelsService.list(null));
     }
 
     @Test
