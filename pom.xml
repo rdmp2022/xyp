@@ -114,6 +114,10 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
+                    <fork>true</fork>
+                    <executable>
+                        /usr/local/btjdk/jdk8/bin/javac
+                    </executable>
                 </configuration>
             </plugin>
             <plugin>
