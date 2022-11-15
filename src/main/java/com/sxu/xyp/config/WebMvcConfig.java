@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private RefreshTokenInterceptor refreshTokenInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -27,6 +27,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
     @Override
     public void addInterceptors (InterceptorRegistry registry){
-        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns("/**");
+        registry.addInterceptor(refreshTokenInterceptor).addPathPatterns("/**");
     }
 }

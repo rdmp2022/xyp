@@ -15,6 +15,7 @@ import com.sxu.xyp.service.UserService;
 import com.sxu.xyp.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -107,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //登录成功，将生成的token存入redis中
         String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
         //存储
-        String tokenKey = LOGIN_USER_KEY + userDTO.getUserId();
+        String tokenKey = LOGIN_USER_KEY + token;
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("token", token);
         userMap.put("userInfo", userDTO);
@@ -124,14 +125,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (StrUtil.isBlank(token)) {
             throw new BusinessException(ErrorCode.LOGIN_ERROR, "未获取到token");
         }
-        // 2.基于TOKEN获取redis中的用户
+        // 2.基于token获取redis中的用户
         String key = LOGIN_USER_KEY + token;
-        String userJsonStr = (String) redisTemplate.opsForValue().get(key);
+        Object userInfo = redisTemplate.opsForHash().entries(key).get("userInfo");
         // 3.判断用户是否存在
-        if (StrUtil.isBlank(userJsonStr)) {
+        if (userInfo == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
         }
-        return JSONUtil.toBean(userJsonStr, UserDTO.class);
+        return (UserDTO) userInfo;
     }
 
     /**
