@@ -1,11 +1,9 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,10 +16,11 @@ import com.sxu.xyp.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.sxu.xyp.constant.UserConstant.*;
@@ -88,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public String userLogin(String userAccount, String userPassword) {
+    public Map<String, Object> userLogin(String userAccount, String userPassword) {
         if (StrUtil.hasBlank(userAccount, userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
@@ -108,11 +107,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //登录成功，将生成的token存入redis中
         String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
         //存储
-        String tokenKey = LOGIN_USER_KEY + token;
-        redisTemplate.opsForValue().set(tokenKey, JSONUtil.toJsonStr(userDTO));
+        String tokenKey = LOGIN_USER_KEY + userDTO.getUserId();
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("token", token);
+        userMap.put("userInfo", userDTO);
+        redisTemplate.opsForHash().putAll(tokenKey, userMap);
         //设置token有效期
         redisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
-        return token;
+        return userMap;
     }
 
     @Override

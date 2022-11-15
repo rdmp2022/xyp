@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -40,14 +41,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<String> userLogin(@RequestBody LoginRequest loginRequest) {
+    public BaseResponse<Map<String, Object>> userLogin(@RequestBody LoginRequest loginRequest) {
         if (loginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
-        String token = userService.userLogin(userAccount, userPassword);
-        return ResultUtil.success(token);
+
+        Map<String, Object> userMap = userService.userLogin(userAccount, userPassword);
+        return ResultUtil.success(userMap);
     }
 
     @GetMapping("/current")

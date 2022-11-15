@@ -3,9 +3,9 @@ package com.sxu.xyp.service;
 import com.sxu.xyp.common.UserDTO;
 import com.sxu.xyp.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
 * @author
@@ -17,7 +17,7 @@ public interface UserService extends IService<User> {
 
     long userRegister(String userAccount, String email,String userPassword, String checkPassword);
 
-    String userLogin(String userAccount, String userPassword);
+    Map<String, Object> userLogin(String userAccount, String userPassword);
 
     UserDTO toUserDTO(HttpServletRequest request);
 
