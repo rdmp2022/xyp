@@ -2,12 +2,13 @@ package com.sxu.xyp.controller;
 
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
-import com.sxu.xyp.model.domain.Article.Articles;
 import com.sxu.xyp.model.domain.Article.OpenArticles;
+import com.sxu.xyp.model.domain.ArticleLabel;
+import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,42 +22,55 @@ import java.util.List;
 @RequestMapping("/post")
 public class ArticleController {
 
-    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    ArticlesService articlesService;
+
+    @Resource
+    UserService userService;
+
+    @Resource
+    ArticleLabelService articleLabelService;
+
+    @Resource
+    CommentsService commentsService;
+
+    @Resource
+    LabelsService labelsService;
 
     @GetMapping("/add")
     public BaseResponse<List<OpenArticles>> add() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
 
     @GetMapping("/update")
     public BaseResponse<List<OpenArticles>> update() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
     @GetMapping("/remove")
     public BaseResponse<List<OpenArticles>> remove() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
     @GetMapping("/list")
     public BaseResponse<List<OpenArticles>> list() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
     @GetMapping("/detail")
     public BaseResponse<List<OpenArticles>> detail() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
     @GetMapping("/search")
     public BaseResponse<List<OpenArticles>> search() {
-        List<Articles> list = articlesService.list();
+
         return ResultUtil.success(null);
     }
 
