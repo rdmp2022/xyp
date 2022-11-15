@@ -3,9 +3,12 @@ package com.sxu.xyp.utils;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.sxu.xyp.common.ErrorCode;
+import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.common.UserDTO;
 import com.sxu.xyp.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -28,9 +31,6 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 
-    @Resource
-    private UserService userService;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 1.获取请求头中的token
@@ -39,14 +39,13 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
             return true;
         }
         // 2.基于TOKEN获取redis中的用户
-        String key  = LOGIN_USER_KEY + token;
+        String key = LOGIN_USER_KEY + token;
         String userJsonStr = stringRedisTemplate.opsForValue().get(key);
         // 3.判断用户是否存在
         if (StrUtil.isBlank(userJsonStr)) {
             return true;
         }
-        User user = JSONUtil.toBean(userJsonStr, User.class);
-        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        UserDTO userDTO = JSONUtil.toBean(userJsonStr, UserDTO.class);
         // 6.存在，保存用户信息到 ThreadLocal
         UserHolder.saveUser(userDTO);
         // 7.刷新token有效期

@@ -1,8 +1,12 @@
 package com.sxu.xyp.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
+import com.sxu.xyp.common.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.request.LoginRequest;
 import com.sxu.xyp.model.request.RegisterRequest;
@@ -11,6 +15,7 @@ import io.swagger.annotations.Api;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -20,9 +25,6 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody RegisterRequest registerRequest) {
@@ -46,6 +48,12 @@ public class UserController {
         String userPassword = loginRequest.getUserPassword();
         String token = userService.userLogin(userAccount, userPassword);
         return ResultUtil.success(token);
+    }
+
+    @GetMapping("/current")
+    public BaseResponse<UserDTO> currentUser(HttpServletRequest request){
+        UserDTO userDTO = userService.toUserDTO(request);
+        return ResultUtil.success(userDTO);
     }
 
     @GetMapping("/test")

@@ -18,7 +18,9 @@ import com.sxu.xyp.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
@@ -113,12 +115,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return token;
     }
 
+    @Override
+    public UserDTO toUserDTO(HttpServletRequest request){
+        // 1.获取请求头中的token
+        String token = request.getHeader("authorization");
+        if (StrUtil.isBlank(token)) {
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "未获取到token");
+        }
+        // 2.基于TOKEN获取redis中的用户
+        String key = LOGIN_USER_KEY + token;
+        String userJsonStr = (String) redisTemplate.opsForValue().get(key);
+        // 3.判断用户是否存在
+        if (StrUtil.isBlank(userJsonStr)) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+        }
+        return JSONUtil.toBean(userJsonStr, UserDTO.class);
+    }
+
     /**
      * 脱敏
      * @param user
      * @return
      */
-
 
     /*@Override
     public User getSafetyUser(User user) {
