@@ -30,15 +30,18 @@ public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
         // 插入
         Labels labels = new Labels();
         labels.setLabelName(label);
-        labelsMapper.insert(labels);
-        return labels.getLabelId();
+        if (labelsMapper.insert(labels) != 0) {
+            return labels.getLabelId();
+        }
+        // 错误
+        return 0L;
     }
 
     @Override
     public Boolean searchLabel(String label) {
         QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("label_name",label);
-        int count = this.count();
+        int count = this.count(queryWrapper);
         if (count > 0) {
             return true;
         }

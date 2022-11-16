@@ -1,6 +1,5 @@
 package com.sxu.xyp.service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sxu.xyp.model.domain.Labels;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,7 +9,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-11-14 22:02:17
 */
 public interface LabelsService extends IService<Labels> {
-    public Long addLabel(String label);
+    /*
+    *  Labels中插入 label,返回 labels_id
+    */
+    Long addLabel(String label);
 
-    public Boolean searchLabel(String label);
+    Boolean searchLabel(String label);
 }

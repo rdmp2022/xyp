@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 * @createDate 2022-11-14 22:06:22
 */
 @Service
-public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel>
-    implements ArticleLabelService{
+public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel> implements ArticleLabelService{
 
 }
 

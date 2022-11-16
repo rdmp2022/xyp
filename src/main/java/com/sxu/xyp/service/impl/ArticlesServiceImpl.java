@@ -44,9 +44,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public Long add(AddArticle addArticle, UserDTO user) {
-        /*
-         * 标签，
-         */
+
         Articles article = new Articles();
         article.setTitle(addArticle.getTitle());
         article.setContent(addArticle.getContent());
@@ -55,9 +53,8 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         article.setFavoritesCount(0L);
         article.setUserId(user.getUserId());
         this.save(article);
-        // 标签,文章id，帖子id
 
-        //如果标签不存在
+        // 标签操作
         Long id = article.getArticleId();
         List<String> tags = addArticle.getTags();
         for (String tag : tags) {
