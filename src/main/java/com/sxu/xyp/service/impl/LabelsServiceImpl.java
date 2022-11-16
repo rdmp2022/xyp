@@ -22,26 +22,27 @@ public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
     LabelsMapper labelsMapper;
 
     @Override
-    public int addLabel(String label) {
-        int count = labelsMapper.selectCount(new QueryWrapper<Labels>().eq("label_name", label));
-        if (count > 0) {
-            return 0;
+    public Long addLabel(String label) {
+        // 存在返回id
+        if (this.searchLabel(label)) {
+            return this.getOne(new QueryWrapper<Labels>().eq("label_name",label)).getLabelId();
         }
+        // 插入
         Labels labels = new Labels();
         labels.setLabelName(label);
         labelsMapper.insert(labels);
-        return 1;
+        return labels.getLabelId();
     }
 
     @Override
-    public int searchLabel(String label) {
+    public Boolean searchLabel(String label) {
         QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("label_name",label);
         int count = this.count();
         if (count > 0) {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 }
 

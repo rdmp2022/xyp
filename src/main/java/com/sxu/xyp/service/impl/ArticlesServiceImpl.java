@@ -16,6 +16,7 @@ import com.sxu.xyp.mapper.ArticlesMapper;
 import com.sxu.xyp.service.LabelsService;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,11 +34,6 @@ import java.util.List;
 public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> implements ArticlesService{
 
 
-    @Resource
-    UserService userService;
-
-    @Resource
-    ArticlesService articlesService;
 
     @Resource
     LabelsService labelsService;
@@ -45,6 +41,8 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     @Resource
     ArticleLabelService articleLabelService;
 
+
+    @Override
     public Long add(AddArticle addArticle, UserDTO user) {
         /*
          * 标签，
@@ -64,13 +62,11 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         List<String> tags = addArticle.getTags();
         for (String tag : tags) {
             //不存在相同标签
-            if (labelsService.searchLabel(tag) == 0) {
-                labelsService.addLabel(tag);
-            }
-            articleLabelService.save(id, );
-
+            Long labelId = labelsService.addLabel(tag);
+            ArticleLabel articleLabel = new ArticleLabel(id, labelId);
+            articleLabelService.save(articleLabel);
         }
-
+        return 1L;
     }
 }
 
