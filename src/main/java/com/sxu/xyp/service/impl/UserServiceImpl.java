@@ -4,18 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
-import com.sxu.xyp.common.UserDTO;
+import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
 import com.sxu.xyp.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -120,6 +118,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public UserDTO toUserDTO(HttpServletRequest request){
+        if (request == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "未收到请求");
+        }
         // 1.获取请求头中的token
         String token = request.getHeader("authorization");
         if (StrUtil.isBlank(token)) {
@@ -130,10 +131,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         Object userInfo = redisTemplate.opsForHash().entries(key).get("userInfo");
         // 3.判断用户是否存在
         if (userInfo == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "用户不存在");
         }
         return (UserDTO) userInfo;
     }
+
+    @Override
+    public void updateUser(User user, HttpServletRequest request) {
+        UserDTO oldUserDTO = toUserDTO(request);
+        Long oldUserDTOId = oldUserDTO.getUserId();
+        if (!user.getUserId().equals(oldUserDTOId)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户信息不匹配");
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getUserId());
+        this.baseMapper.update(user, queryWrapper);
+    }
+
+    /**
+     * 是否为管理员
+     * @param request 含token的请求
+     * @return 返回true-管理员
+     */
+    public boolean isAdmin(HttpServletRequest request){
+        UserDTO userDTO = toUserDTO(request);
+        Integer userRole = userDTO.getUserRole();
+        return userRole == ADMIN_ROLE;
+    }
+
 
     /**
      * 脱敏

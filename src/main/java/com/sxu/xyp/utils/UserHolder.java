@@ -1,6 +1,6 @@
 package com.sxu.xyp.utils;
 
-import com.sxu.xyp.common.UserDTO;
+import com.sxu.xyp.model.dto.UserDTO;
 
 public class UserHolder {
     private static final ThreadLocal<UserDTO> tl = new ThreadLocal<>();

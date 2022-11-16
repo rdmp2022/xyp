@@ -1,17 +1,9 @@
 package com.sxu.xyp.utils;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import com.sxu.xyp.common.ErrorCode;
-import com.sxu.xyp.exception.BusinessException;
-import com.sxu.xyp.model.domain.User;
-import com.sxu.xyp.common.UserDTO;
-import com.sxu.xyp.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sxu.xyp.model.dto.UserDTO;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;

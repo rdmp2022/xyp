@@ -1,18 +1,16 @@
 package com.sxu.xyp.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
-import com.sxu.xyp.common.UserDTO;
+import com.sxu.xyp.model.domain.User;
+import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.request.LoginRequest;
 import com.sxu.xyp.model.request.RegisterRequest;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +55,18 @@ public class UserController {
         UserDTO userDTO = userService.toUserDTO(request);
         return ResultUtil.success(userDTO);
     }
+
+    @PutMapping("/update")
+    public BaseResponse<UserDTO> updateById(@RequestBody User user, HttpServletRequest request){
+        userService.updateUser(user, request);
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        return ResultUtil.success(userDTO);
+    }
+
+//    @PutMapping("/updateAvatarUrl")
+//    public BaseResponse<UserDTO> updateAvatarUrl(@RequestParam String avatarUrl, HttpServletRequest request){
+//
+//    }
 
     @GetMapping("/test")
     public BaseResponse<String> testGet(){

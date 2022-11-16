@@ -10,4 +10,8 @@ public class UserConstant {
 
     public static final Long LOGIN_USER_TTL = 30L;
 
+    public static final int ADMIN_ROLE = 1;
+
+    public static final int DEFAULT_ROLE = 0;
+
 }
