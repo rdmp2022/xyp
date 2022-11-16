@@ -3,6 +3,7 @@ package com.sxu.xyp.service;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -22,6 +23,8 @@ public interface UserService extends IService<User> {
     UserDTO toUserDTO(HttpServletRequest request);
 
     void updateUser(User user, HttpServletRequest request);
+
+    String updateAvatarUrl(MultipartFile multipartFile, HttpServletRequest request);
 
 //    User getSafetyUser(User user);
 

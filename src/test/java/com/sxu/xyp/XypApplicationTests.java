@@ -45,4 +45,9 @@ class XypApplicationTests {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(LOGIN_USER_KEY + 3);
         System.out.println(map);
     }
+
+    @Test
+    void testAvatarUtl(){
+
+    }
 }

@@ -1,22 +1,31 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
+import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
 import com.sxu.xyp.mapper.UserMapper;
+import com.sxu.xyp.utils.FileUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -146,6 +155,65 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", user.getUserId());
         this.baseMapper.update(user, queryWrapper);
+    }
+
+    @Override
+    public String updateAvatarUrl(MultipartFile multipartFile, HttpServletRequest request) {
+        if (multipartFile.isEmpty()){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请上传图片");
+        }
+        //源文件名称
+        String originalFilename = multipartFile.getOriginalFilename();
+        if (StrUtil.isBlank(originalFilename)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请上传图片");
+        }
+//        String suffix = originalFilename.substring(originalFilename.lastIndexOf('.')).toLowerCase();
+        String suffix = FileUtil.extName(originalFilename);
+        if (!FileUtils.IMAGE_EXTENSIONS.contains(suffix)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片格式有误");
+        }
+        DateTime dateTime = new DateTime();
+        String lastFilePath;
+        String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + suffix;
+        String folderName = File.separator + "avatars" + File.separator;
+        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime);
+        String filePath = "/www/wwwroot/xyp/temp" + relativePath;
+        String fileUrl = null;
+        File targetFile = new File(filePath);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        FileOutputStream out = null;
+        try {
+            lastFilePath = filePath + File.separator + newFileName;
+            out = new FileOutputStream(lastFilePath);
+            out.write(multipartFile.getBytes());
+            fileUrl = "https://43.138.69.76:9652" + relativePath + File.separator + newFileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (fileUrl == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片上传失败");
+        }
+        UserDTO userDTO = toUserDTO(request);
+        userDTO.setAvatar(fileUrl);
+        User user = userMapper.selectById(userDTO.getUserId());
+        user.setAvatar(fileUrl);
+        this.updateById(user);
+        return fileUrl;
     }
 
     /**

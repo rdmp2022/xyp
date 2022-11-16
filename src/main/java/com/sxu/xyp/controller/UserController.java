@@ -12,6 +12,8 @@ import com.sxu.xyp.model.request.RegisterRequest;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -63,10 +65,11 @@ public class UserController {
         return ResultUtil.success(userDTO);
     }
 
-//    @PutMapping("/updateAvatarUrl")
-//    public BaseResponse<UserDTO> updateAvatarUrl(@RequestParam String avatarUrl, HttpServletRequest request){
-//
-//    }
+    @PutMapping("/updateAvatarUrl")
+    public BaseResponse<String> updateAvatarUrl(@RequestParam MultipartFile multipartFile, HttpServletRequest request){
+        String fileUrl = userService.updateAvatarUrl(multipartFile, request);
+        return ResultUtil.success(fileUrl);
+    }
 
     @GetMapping("/test")
     public BaseResponse<String> testGet(){
