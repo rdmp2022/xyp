@@ -10,15 +10,16 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
-* @author 86187
-* @description 针对表【labels(标签表)】的数据库操作Service实现
-* @createDate 2022-11-14 22:02:17
-*/
+ * @author 86187
+ * @description 针对表【labels(标签表)】的数据库操作Service实现
+ * @createDate 2022-11-14 22:02:17
+ */
 @Service
 public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
-    implements LabelsService{
+        implements LabelsService{
+
     @Resource
-    com.sxu.xyp.mapper.LabelsMapper labelsMapper;
+    LabelsMapper labelsMapper;
 
     @Override
     public int addLabel(String label) {
@@ -30,6 +31,17 @@ public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
         labels.setLabelName(label);
         labelsMapper.insert(labels);
         return 1;
+    }
+
+    @Override
+    public int searchLabel(String label) {
+        QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("label_name",label);
+        int count = this.count();
+        if (count > 0) {
+            return 1;
+        }
+        return 0;
     }
 }
 

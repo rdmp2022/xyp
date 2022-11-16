@@ -10,4 +10,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface LabelsService extends IService<Labels> {
     int addLabel(String label);
+
+    public int searchLabel(String label);
 }
