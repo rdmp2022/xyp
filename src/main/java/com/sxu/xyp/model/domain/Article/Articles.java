@@ -64,14 +64,14 @@ public class Articles implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "createTime")
-    private Date createtime;
+    @TableField(value = "create_time")
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    @TableField(value = "updateTime")
-    private Date updatetime;
+    @TableField(value = "update_time")
+    private Date updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -191,28 +191,28 @@ public class Articles implements Serializable {
     /**
      * 创建时间
      */
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
      * 创建时间
      */
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
      * 修改时间
      */
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
     /**
      * 修改时间
      */
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

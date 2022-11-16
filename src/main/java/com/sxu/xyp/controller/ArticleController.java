@@ -3,6 +3,7 @@ package com.sxu.xyp.controller;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.model.domain.Article.AddArticle;
+import com.sxu.xyp.model.domain.Article.Articles;
 import com.sxu.xyp.model.domain.Article.OpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.service.*;
@@ -40,11 +41,18 @@ public class ArticleController {
     LabelsService labelsService;
 
     @GetMapping("/add")
-    public BaseResponse<Long> add(@RequestBody AddArticle addArticle, HttpServletRequest request) {
-        articlesService.add(addArticle, userService.toUserDTO(request));
-        return ResultUtil.success(null);
+    public BaseResponse<Articles> add(@RequestBody AddArticle addArticle, HttpServletRequest request) {
+        Long articleId = articlesService.add(addArticle, userService.toUserDTO(request));
+        Articles article = articlesService.getById(articleId);
+        return ResultUtil.success(article);
     }
 
+
+    @GetMapping("/remove")
+    public BaseResponse<List<OpenArticles>> remove() {
+
+        return ResultUtil.success(null);
+    }
 
     @GetMapping("/update")
     public BaseResponse<List<OpenArticles>> update() {
@@ -52,11 +60,7 @@ public class ArticleController {
         return ResultUtil.success(null);
     }
 
-    @GetMapping("/remove")
-    public BaseResponse<List<OpenArticles>> remove() {
 
-        return ResultUtil.success(null);
-    }
 
     @GetMapping("/list")
     public BaseResponse<List<OpenArticles>> list() {

@@ -13,14 +13,14 @@
             <result property="views" column="views" jdbcType="BIGINT"/>
             <result property="commentCount" column="comment_count" jdbcType="BIGINT"/>
             <result property="favoritesCount" column="favorites_count" jdbcType="BIGINT"/>
-            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         article_id,user_id,title,
         summary,content,views,
-        comment_count,favorites_count,createTime,
-        updateTime
+        comment_count,favorites_count,create_time,
+        update_time
     </sql>
 </mapper>

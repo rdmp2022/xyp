@@ -12,5 +12,5 @@ import com.sxu.xyp.model.dto.UserDTO;
 */
 public interface ArticlesService extends IService<Articles> {
 
-    public Long add(AddArticle addArticle, UserDTO user);
+    Long add(AddArticle addArticle, UserDTO user);
 }

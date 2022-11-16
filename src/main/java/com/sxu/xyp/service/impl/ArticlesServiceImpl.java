@@ -44,7 +44,6 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public Long add(AddArticle addArticle, UserDTO user) {
-
         Articles article = new Articles();
         article.setTitle(addArticle.getTitle());
         article.setContent(addArticle.getContent());
@@ -52,18 +51,22 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         article.setViews(0L);
         article.setFavoritesCount(0L);
         article.setUserId(user.getUserId());
+        article.setCommentCount(0L);
         this.save(article);
 
         // 标签操作
+        // 用户id
         Long id = article.getArticleId();
         List<String> tags = addArticle.getTags();
         for (String tag : tags) {
-            //不存在相同标签
+            //标签id
             Long labelId = labelsService.addLabel(tag);
-            ArticleLabel articleLabel = new ArticleLabel(id, labelId);
-            articleLabelService.save(articleLabel);
+            if (labelId != 0L) {
+                ArticleLabel articleLabel = new ArticleLabel(id, labelId);
+                articleLabelService.save(articleLabel);
+            }
         }
-        return 1L;
+        return id;
     }
 }
 
