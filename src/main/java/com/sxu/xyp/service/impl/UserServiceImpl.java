@@ -209,7 +209,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片上传失败");
         }
         UserDTO userDTO = toUserDTO(request);
-        userDTO.setAvatar(fileUrl);
         User user = userMapper.selectById(userDTO.getUserId());
         user.setAvatar(fileUrl);
         this.updateById(user);
