@@ -10,26 +10,39 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
-* @author 86187
-* @description 针对表【labels(标签表)】的数据库操作Service实现
-* @createDate 2022-11-14 22:02:17
-*/
+ * @author 86187
+ * @description 针对表【labels(标签表)】的数据库操作Service实现
+ * @createDate 2022-11-14 22:02:17
+ */
 @Service
 public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
-    implements LabelsService{
+        implements LabelsService{
+
     @Resource
-    com.sxu.xyp.mapper.LabelsMapper labelsMapper;
+    LabelsMapper labelsMapper;
 
     @Override
-    public int addLabel(String label) {
-        int count = labelsMapper.selectCount(new QueryWrapper<Labels>().eq("label_name", label));
-        if (count > 0) {
-            return 0;
+    public Long addLabel(String label) {
+        // 存在返回id
+        if (this.searchLabel(label)) {
+            return this.getOne(new QueryWrapper<Labels>().eq("label_name",label)).getLabelId();
         }
+        // 插入
         Labels labels = new Labels();
         labels.setLabelName(label);
         labelsMapper.insert(labels);
-        return 1;
+        return labels.getLabelId();
+    }
+
+    @Override
+    public Boolean searchLabel(String label) {
+        QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("label_name",label);
+        int count = this.count();
+        if (count > 0) {
+            return true;
+        }
+        return false;
     }
 }
 

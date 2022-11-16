@@ -2,6 +2,7 @@ package com.sxu.xyp.controller;
 
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
+import com.sxu.xyp.model.domain.Article.AddArticle;
 import com.sxu.xyp.model.domain.Article.OpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.service.*;
@@ -9,6 +10,7 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -38,8 +40,8 @@ public class ArticleController {
     LabelsService labelsService;
 
     @GetMapping("/add")
-    public BaseResponse<List<OpenArticles>> add() {
-
+    public BaseResponse<Long> add(@RequestBody AddArticle addArticle, HttpServletRequest request) {
+        articlesService.add(addArticle, userService.toUserDTO(request));
         return ResultUtil.success(null);
     }
 

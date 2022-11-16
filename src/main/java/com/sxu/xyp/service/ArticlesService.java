@@ -1,7 +1,9 @@
 package com.sxu.xyp.service;
 
+import com.sxu.xyp.model.domain.Article.AddArticle;
 import com.sxu.xyp.model.domain.Article.Articles;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sxu.xyp.model.dto.UserDTO;
 
 /**
 * @author 86187
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ArticlesService extends IService<Articles> {
 
+    public Long add(AddArticle addArticle, UserDTO user);
 }
