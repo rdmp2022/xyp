@@ -13,4 +13,6 @@ import com.sxu.xyp.model.dto.UserDTO;
 public interface ArticlesService extends IService<Articles> {
 
     Long add(AddArticle addArticle, UserDTO user);
+
+    Boolean remove(Long articleId);
 }

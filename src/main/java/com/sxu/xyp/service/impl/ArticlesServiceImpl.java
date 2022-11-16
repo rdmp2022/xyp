@@ -1,5 +1,6 @@
 package com.sxu.xyp.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
@@ -14,25 +15,21 @@ import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.service.ArticlesService;
 import com.sxu.xyp.mapper.ArticlesMapper;
 import com.sxu.xyp.service.LabelsService;
-import com.sxu.xyp.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
-* @author 86187
-* @description 针对表【articles(帖子表)】的数据库操作Service实现
-* @createDate 2022-11-16 11:22:16
-*/
+ * @author 86187
+ * @description 针对表【articles(帖子表)】的数据库操作Service实现
+ * @createDate 2022-11-16 11:22:16
+ */
 @Service
-public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> implements ArticlesService{
-
+public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> implements ArticlesService {
 
 
     @Resource
@@ -68,6 +65,16 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         }
         return id;
     }
+
+    @Override
+    public Boolean remove(Long articleId) {
+        if (this.removeById(articleId) && articleLabelService.removeById(articleId)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }
 
 

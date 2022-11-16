@@ -1,10 +1,13 @@
 package com.sxu.xyp.controller;
 
 import com.sxu.xyp.common.BaseResponse;
+import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
+import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.Article.AddArticle;
 import com.sxu.xyp.model.domain.Article.Articles;
 import com.sxu.xyp.model.domain.Article.OpenArticles;
+import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
@@ -48,8 +51,16 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/remove")
-    public BaseResponse<List<OpenArticles>> remove() {
+    @DeleteMapping("/remove")
+    public BaseResponse<Boolean> remove(@RequestParam Long articleId) {
+        if (!articlesService.remove(articleId)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return ResultUtil.success(true);
+    }
+
+    @GetMapping("/list")
+    public BaseResponse<List<OpenArticles>> list() {
 
         return ResultUtil.success(null);
     }
@@ -62,11 +73,7 @@ public class ArticleController {
 
 
 
-    @GetMapping("/list")
-    public BaseResponse<List<OpenArticles>> list() {
 
-        return ResultUtil.success(null);
-    }
 
     @GetMapping("/detail")
     public BaseResponse<List<OpenArticles>> detail() {
