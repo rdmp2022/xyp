@@ -14,4 +14,6 @@ public class UserConstant {
 
     public static final int DEFAULT_ROLE = 0;
 
+    public static final String url = "C:/Users/Warmly/Desktop/avatars/";
+
 }

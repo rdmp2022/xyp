@@ -23,9 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -190,47 +189,48 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!FileUtils.IMAGE_EXTENSIONS.contains(suffix)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片格式有误");
         }
-        DateTime dateTime = new DateTime();
-        String lastFilePath;
-        String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + suffix;
-        String folderName = File.separator + "avatars" + File.separator;
-        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime);
-        String filePath = "/www/wwwroot/xyp/temp" + relativePath;
-        String fileUrl = null;
-        File targetFile = new File(filePath);
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
+        String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." +  suffix;
+        String lastUrl = url + newFileName;
+        File file = new File(lastUrl);
+        if (!file.exists()){
+            file.mkdirs();
         }
-        FileOutputStream out = null;
         try {
-            lastFilePath = filePath + File.separator + newFileName;
-            out = new FileOutputStream(lastFilePath);
-            out.write(multipartFile.getBytes());
-            fileUrl = "https://43.138.69.76:9652" + relativePath + File.separator + newFileName;
+            multipartFile.transferTo(file);
+        } catch (IOException e) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return lastUrl;
+    }
+
+    public String getUrl(HttpServletResponse response, String filename){
+        //输入流
+        FileInputStream fis = null;
+        //输出流
+        OutputStream os =null;
+        try {
+            //图片所在的位置
+            String Url = url + filename;
+//            String Url = "/www/server/tomcat/uploadImg/"+filename;
+            System.out.println(Url);
+            fis = new FileInputStream(Url);
+            os = response.getOutputStream();
+            int count = 0;
+            byte[] bytes = new byte[1024];
+            while ((count = fis.read(bytes)) != -1){
+                os.write(bytes,0,count);
+                os.flush();
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (out != null) {
-                try {
-                    out.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        if (fileUrl == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片上传失败");
+        try {
+            fis.close();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        UserDTO userDTO = toUserDTO(request);
-        User user = userMapper.selectById(userDTO.getUserId());
-        user.setAvatar(fileUrl);
-        this.updateById(user);
-        return fileUrl;
+        return "ok";
     }
 
     /**

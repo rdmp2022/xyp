@@ -1,6 +1,7 @@
 package com.sxu.xyp.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.UUID;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Map;
 
 @RestController
