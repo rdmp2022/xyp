@@ -1,8 +1,6 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
@@ -10,7 +8,6 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
-import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.User;
@@ -203,7 +200,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return lastUrl;
     }
 
-    public String getUrl(HttpServletResponse response, String filename){
+    @Override
+    public boolean getUrl(HttpServletResponse response, String filename){
         //输入流
         FileInputStream fis = null;
         //输出流
@@ -230,7 +228,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "ok";
+        return true;
     }
 
     /**

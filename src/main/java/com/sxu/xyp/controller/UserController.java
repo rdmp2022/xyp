@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Map;
 
@@ -74,6 +75,12 @@ public class UserController {
     public BaseResponse<String> updateAvatarUrl(@RequestParam MultipartFile multipartFile, HttpServletRequest request){
         String fileUrl = userService.updateAvatarUrl(multipartFile, request);
         return ResultUtil.success(fileUrl);
+    }
+
+    @GetMapping("getAvatarUrl")
+    public BaseResponse<Boolean> getAvatarUrl(@RequestParam String fileName, HttpServletResponse response){
+        boolean b = userService.getUrl(response, fileName);
+        return ResultUtil.success(b);
     }
 
     @GetMapping("/test")

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -25,6 +26,8 @@ public interface UserService extends IService<User> {
     void updateUser(User user, HttpServletRequest request);
 
     String updateAvatarUrl(MultipartFile multipartFile, HttpServletRequest request);
+
+    boolean getUrl(HttpServletResponse response, String filename);
 
 //    User getSafetyUser(User user);
 
