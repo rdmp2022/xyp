@@ -55,7 +55,10 @@ public class UserController {
     @GetMapping("/current")
     public BaseResponse<UserDTO> currentUser(HttpServletRequest request){
         UserDTO userDTO = userService.toUserDTO(request);
-        return ResultUtil.success(userDTO);
+        Long userId = userDTO.getUserId();
+        User user = userService.getBaseMapper().selectById(userId);
+        UserDTO userDTO1 = BeanUtil.copyProperties(user, UserDTO.class);
+        return ResultUtil.success(userDTO1);
     }
 
     @PutMapping("/update")

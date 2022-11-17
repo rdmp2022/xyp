@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 import static com.sxu.xyp.constant.UserConstant.*;
 
 /**
-* @author DELL
+* @author walker
 * @description 针对表【user(用户表)】的数据库操作Service实现
 * @createDate 2022-11-09 09:42:32
 */
@@ -94,6 +94,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user.getUserId();
     }
 
+    /**
+     * 用户注册
+     * @param userAccount 账号
+     * @param userPassword 密码
+     * @return 返回<String, UserDTO>的Map型数据
+     */
     @Override
     public Map<String, Object> userLogin(String userAccount, String userPassword) {
         if (StrUtil.hasBlank(userAccount, userPassword)){
@@ -125,6 +131,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMap;
     }
 
+    /**
+     * 获取User的数据传输模型
+     * @param request http请求
+     * @return 返回userDTO
+     */
     @Override
     public UserDTO toUserDTO(HttpServletRequest request){
         if (request == null){
@@ -145,16 +156,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return (UserDTO) userInfo;
     }
 
+    /**
+     * 修改用户信息
+     * @param user 用户
+     * @param request
+     */
     @Override
     public void updateUser(User user, HttpServletRequest request) {
-        UserDTO oldUserDTO = toUserDTO(request);
-        Long oldUserDTOId = oldUserDTO.getUserId();
-        if (!user.getUserId().equals(oldUserDTOId)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户信息不匹配");
+        Long userId = user.getUserId();
+        if (userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", user.getUserId());
-        this.baseMapper.update(user, queryWrapper);
+        User oldUser = this.getById(user.getUserId());
+        if (oldUser == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        // 3. 触发更新
+        this.baseMapper.updateById(user);
     }
 
     @Override
