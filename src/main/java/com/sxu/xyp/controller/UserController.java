@@ -77,12 +77,6 @@ public class UserController {
         return ResultUtil.success(fileUrl);
     }
 
-    @GetMapping("getAvatarUrl")
-    public BaseResponse<Boolean> getAvatarUrl(@RequestParam String fileName, HttpServletResponse response){
-        boolean b = userService.getUrl(response, fileName);
-        return ResultUtil.success(b);
-    }
-
     @GetMapping("/test")
     public BaseResponse<String> testGet(){
         return ResultUtil.success("get成功jenkins***");

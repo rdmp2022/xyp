@@ -1,6 +1,8 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
@@ -14,6 +16,7 @@ import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.service.UserService;
 import com.sxu.xyp.mapper.UserMapper;
 import com.sxu.xyp.utils.FileUtils;
+import net.sf.jsqlparser.util.validation.metadata.NamedObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +31,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.sxu.xyp.constant.UserConstant.*;
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 /**
 * @author walker
@@ -186,49 +190,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!FileUtils.IMAGE_EXTENSIONS.contains(suffix)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片格式有误");
         }
-        String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." +  suffix;
-        String lastUrl = url + newFileName;
-        File file = new File(lastUrl);
-        if (!file.exists()){
-            file.mkdirs();
+        DateTime dateTime = new DateTime();
+        String lastFilePath;
+        String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + suffix;
+        String folderName = File.separator + "avatars" + File.separator;
+        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime);
+        String filePath = "/www/wwwroot/xyp/temp" + relativePath;
+        String fileUrl = null;
+        File targetFile = new File(filePath);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
         }
+        FileOutputStream out = null;
         try {
-            multipartFile.transferTo(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lastUrl;
-    }
-
-    @Override
-    public boolean getUrl(HttpServletResponse response, String filename){
-        //输入流
-        FileInputStream fis = null;
-        //输出流
-        OutputStream os =null;
-        try {
-            //图片所在的位置
-            String Url = url + filename;
-//            String Url = "/www/server/tomcat/uploadImg/"+filename;
-            System.out.println(Url);
-            fis = new FileInputStream(Url);
-            os = response.getOutputStream();
-            int count = 0;
-            byte[] bytes = new byte[1024];
-            while ((count = fis.read(bytes)) != -1){
-                os.write(bytes,0,count);
-                os.flush();
-            }
+            lastFilePath = filePath + File.separator + newFileName;
+            out = new FileOutputStream(lastFilePath);
+            out.write(multipartFile.getBytes());
+            fileUrl = "http://43.138.69.76:9999/" + newFileName;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        try {
-            fis.close();
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (fileUrl == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片上传失败");
         }
-        return true;
+        UserDTO userDTO = toUserDTO(request);
+        User user = this.baseMapper.selectById(userDTO.getUserId());
+        user.setAvatar(fileUrl);
+        this.updateById(user);
+        return fileUrl;
     }
 
     /**
