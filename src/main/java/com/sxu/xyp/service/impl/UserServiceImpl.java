@@ -194,7 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String lastFilePath;
         String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + suffix;
         String folderName = File.separator + "avatars" + File.separator;
-        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime);
+        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime) + File.separator;
         String filePath = "/www/wwwroot/xyp/temp" + relativePath;
         String fileUrl = null;
         File targetFile = new File(filePath);
