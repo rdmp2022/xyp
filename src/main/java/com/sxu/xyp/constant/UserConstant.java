@@ -8,7 +8,7 @@ public class UserConstant {
 
     public static final String LOGIN_USER_KEY = "login:user:key:";
 
-    public static final Long LOGIN_USER_TTL = 30L;
+    public static final Long LOGIN_USER_TTL = 6L;
 
     public static final int ADMIN_ROLE = 1;
 
