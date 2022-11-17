@@ -1,5 +1,6 @@
 package com.sxu.xyp.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
@@ -9,6 +10,7 @@ import com.sxu.xyp.model.domain.Article.Articles;
 import com.sxu.xyp.model.domain.Article.OpenArticles;
 import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
+import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +45,7 @@ public class ArticleController {
     @Resource
     LabelsService labelsService;
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public BaseResponse<Articles> add(@RequestBody AddArticle addArticle, HttpServletRequest request) {
         Long articleId = articlesService.add(addArticle, userService.toUserDTO(request));
         Articles article = articlesService.getById(articleId);
@@ -60,18 +62,14 @@ public class ArticleController {
     }
 
     @GetMapping("/list")
-    public BaseResponse<List<OpenArticles>> list() {
-
-        return ResultUtil.success(null);
+    public BaseResponse<List<UnOpenArticles>> list() {
+        return ResultUtil.success(articlesService.listAll());
     }
 
     @GetMapping("/update")
     public BaseResponse<List<OpenArticles>> update() {
-
         return ResultUtil.success(null);
     }
-
-
 
 
 
