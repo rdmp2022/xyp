@@ -206,7 +206,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             lastFilePath = filePath + File.separator + newFileName;
             out = new FileOutputStream(lastFilePath);
             out.write(multipartFile.getBytes());
-            fileUrl = "http://43.138.69.76:9999" + folderName+ relativePath + newFileName;
+            fileUrl = "http://43.138.69.76:9999" + relativePath + newFileName;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
