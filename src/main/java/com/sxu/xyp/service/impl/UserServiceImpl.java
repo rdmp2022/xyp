@@ -195,7 +195,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         try {
             multipartFile.transferTo(file);
         } catch (IOException e) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            e.printStackTrace();
         }
         return lastUrl;
     }
