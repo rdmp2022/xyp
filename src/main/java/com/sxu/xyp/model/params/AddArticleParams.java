@@ -1,4 +1,4 @@
-package com.sxu.xyp.model.domain.Article;
+package com.sxu.xyp.model.params;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @date: 2022/11/16 11:36
  */
 @Data
-public class AddArticle {
+public class AddArticleParams {
 
     private String title;
 

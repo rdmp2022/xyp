@@ -1,7 +1,7 @@
 package com.sxu.xyp.service;
 
-import com.sxu.xyp.model.domain.Article.AddArticle;
-import com.sxu.xyp.model.domain.Article.Articles;
+import com.sxu.xyp.model.params.AddArticleParams;
+import com.sxu.xyp.model.domain.Articles;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.model.dto.UserDTO;
@@ -15,7 +15,7 @@ import java.util.List;
 */
 public interface ArticlesService extends IService<Articles> {
 
-    Long add(AddArticle addArticle, UserDTO user);
+    Long add(AddArticleParams addArticleParams, UserDTO user);
 
     Boolean remove(Long articleId);
 

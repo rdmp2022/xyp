@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxu.xyp.mapper.BannerMapper">
 
-    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.index.Banner">
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Banner">
             <id property="bannerId" column="banner_id" jdbcType="BIGINT"/>
             <result property="bannerUrl" column="banner_url" jdbcType="VARCHAR"/>
             <result property="isShow" column="is_show" jdbcType="INTEGER"/>

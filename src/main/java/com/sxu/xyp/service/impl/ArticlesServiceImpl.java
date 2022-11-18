@@ -1,17 +1,12 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sxu.xyp.common.BaseResponse;
-import com.sxu.xyp.common.ResultUtil;
 
-import com.sxu.xyp.model.domain.Article.AddArticle;
-import com.sxu.xyp.model.domain.Article.Articles;
-import com.sxu.xyp.model.domain.Article.OpenArticles;
+import com.sxu.xyp.model.params.AddArticleParams;
+import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
-import com.sxu.xyp.model.domain.Labels;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.service.ArticlesService;
@@ -22,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -42,11 +36,11 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
 
     @Override
-    public Long add(AddArticle addArticle, UserDTO user) {
+    public Long add(AddArticleParams addArticleParams, UserDTO user) {
         Articles article = new Articles();
-        article.setTitle(addArticle.getTitle());
-        article.setContent(addArticle.getContent());
-        article.setSummary(addArticle.getSummary());
+        article.setTitle(addArticleParams.getTitle());
+        article.setContent(addArticleParams.getContent());
+        article.setSummary(addArticleParams.getSummary());
         article.setViews(0L);
         article.setFavoritesCount(0L);
         article.setUserId(user.getUserId());
@@ -56,7 +50,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         // 标签操作
         // 用户id
         Long id = article.getArticleId();
-        List<String> tags = addArticle.getTags();
+        List<String> tags = addArticleParams.getTags();
         for (String tag : tags) {
             //标签id
             Long labelId = labelsService.addLabel(tag);

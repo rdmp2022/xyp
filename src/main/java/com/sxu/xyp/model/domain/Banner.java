@@ -1,4 +1,4 @@
-package com.sxu.xyp.model.domain.index;
+package com.sxu.xyp.model.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

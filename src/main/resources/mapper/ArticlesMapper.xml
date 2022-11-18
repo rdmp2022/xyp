@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxu.xyp.mapper.ArticlesMapper">
 
-    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Article.Articles">
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.Articles">
             <id property="articleId" column="article_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
