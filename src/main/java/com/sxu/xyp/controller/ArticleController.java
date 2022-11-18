@@ -6,8 +6,6 @@ import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
-import com.sxu.xyp.model.domain.Article.OpenArticles;
-import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -59,20 +57,20 @@ public class ArticleController {
     }
 
     @GetMapping("/update")
-    public BaseResponse<List<UnOpenArticles>> list() {
-        return ResultUtil.success(articlesService.listAll());
+    public BaseResponse<Articles> list() {
+        return null;
     }
 
 
 
     @GetMapping("/detail")
-    public BaseResponse<List<OpenArticles>> detail() {
+    public BaseResponse<Articles> detail() {
 
         return ResultUtil.success(null);
     }
 
     @GetMapping("/search")
-    public BaseResponse<List<OpenArticles>> search() {
+    public BaseResponse<Articles> search() {
 
         return ResultUtil.success(null);
     }

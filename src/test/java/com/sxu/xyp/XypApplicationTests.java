@@ -34,16 +34,12 @@ class XypApplicationTests {
 
     @Test
     void testRegister(){
-        String userAccount = "wmyaoo2";
-        String userPassword = "11111111";
-        String checkPassword = "11111111";
-        userService.userRegister(userAccount,"1234@122143.com", userPassword, checkPassword);
+
     }
 
     @Test
     void testLogin(){
-        Map<Object, Object> map = redisTemplate.opsForHash().entries(LOGIN_USER_KEY + 3);
-        System.out.println(map);
+
     }
 
     @Test

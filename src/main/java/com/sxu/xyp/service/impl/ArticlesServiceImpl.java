@@ -1,13 +1,11 @@
 package com.sxu.xyp.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
-import com.sxu.xyp.model.domain.Article.UnOpenArticles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.dto.UserDTO;
+import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.service.ArticlesService;
 import com.sxu.xyp.mapper.ArticlesMapper;
@@ -70,12 +68,10 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         return false;
     }
 
-
     @Override
-    public List<UnOpenArticles> listAll() {
-        List<Articles> articles = this.list();
-        List<UnOpenArticles> unOpenArticles = BeanUtil.copyToList (articles, UnOpenArticles.class);
-        return unOpenArticles;
+    public List<ArticleParam> listAll() {
+
+        return null;
     }
 
 }
