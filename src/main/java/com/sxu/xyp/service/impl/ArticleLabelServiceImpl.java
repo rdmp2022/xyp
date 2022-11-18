@@ -1,10 +1,19 @@
 package com.sxu.xyp.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.domain.ArticleLabel;
+import com.sxu.xyp.model.domain.Labels;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.mapper.ArticleLabelMapper;
+import com.sxu.xyp.service.LabelsService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
 * @author 86187
@@ -14,6 +23,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel> implements ArticleLabelService{
 
+    @Resource
+    ArticleLabelMapper articleLabelMapper;
+
+    @Resource
+    LabelsService labelsService;
+
+    @Override
+    public List<String> getAllLabelID(Long id) {
+        List<String> list = new ArrayList<>();
+        List<ArticleLabel> articleLabels = articleLabelMapper.selectBatchIds(Arrays.asList(id));
+        for (ArticleLabel articleLabel : articleLabels) {
+            QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("label_id",articleLabel.getLabelId());
+            Labels label = labelsService.getOne(queryWrapper);
+            list.add(label.getLabelName());
+        }
+        return list;
+    }
 }
 
 

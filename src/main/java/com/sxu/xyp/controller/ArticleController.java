@@ -1,11 +1,13 @@
 package com.sxu.xyp.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
+import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,10 @@ public class ArticleController {
 
     @PostMapping("/add")
     public BaseResponse<Articles> add(@RequestBody AddArticleParams addArticleParams, HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        if (StrUtil.isBlank(token)) {
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后发布帖子");
+        }
         Long articleId = articlesService.add(addArticleParams, userService.toUserDTO(request));
         Articles article = articlesService.getById(articleId);
         return ResultUtil.success(article);
@@ -56,17 +62,20 @@ public class ArticleController {
         return ResultUtil.success(true);
     }
 
+    @GetMapping("/list")
+    public BaseResponse<List<ArticleParam>> list() {
+        return ResultUtil.success(articlesService.listAll());
+    }
+
     @GetMapping("/update")
-    public BaseResponse<Articles> list() {
+    public BaseResponse<Articles> UPDATE() {
         return null;
     }
 
 
-
     @GetMapping("/detail")
-    public BaseResponse<Articles> detail() {
-
-        return ResultUtil.success(null);
+    public BaseResponse<ArticleParam> detail(@RequestParam Long articleId) {
+        return ResultUtil.success(articlesService.detail(articleId));
     }
 
     @GetMapping("/search")

@@ -1,5 +1,6 @@
 package com.sxu.xyp.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
@@ -11,6 +12,7 @@ import com.sxu.xyp.service.ArticlesService;
 import com.sxu.xyp.mapper.ArticlesMapper;
 import com.sxu.xyp.service.LabelsService;
 
+import com.sxu.xyp.service.UserService;
 import org.springframework.stereotype.Service;
 
 
@@ -31,6 +33,9 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Resource
     ArticleLabelService articleLabelService;
+
+    @Resource
+    UserService userService;
 
 
     @Override
@@ -70,8 +75,26 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public List<ArticleParam> listAll() {
+        List<Articles> articlesList = this.list();
+        List<ArticleParam> articlesParam = BeanUtil.copyToList(articlesList, ArticleParam.class);
+        for (ArticleParam articleParam : articlesParam) {
+            //作者名称
+            articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
+            //标签
+            List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+            articleParam.setTags(list);
+        }
+        return articlesParam;
+    }
 
-        return null;
+    @Override
+    public ArticleParam detail(Long articleId) {
+        Articles articles = this.getById(articleId);
+        ArticleParam articleParam = BeanUtil.copyProperties(articles, ArticleParam.class);
+        articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
+        List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+        articleParam.setTags(list);
+        return articleParam;
     }
 
 }

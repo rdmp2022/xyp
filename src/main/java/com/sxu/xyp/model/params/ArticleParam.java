@@ -1,5 +1,6 @@
 package com.sxu.xyp.model.params;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,7 +13,14 @@ import java.util.List;
  */
 @Data
 public class ArticleParam {
+
+    private Long articleId;
+
+    private Long userId;
+
     private String title;
+
+    private String content;
 
     private String summary;
 
@@ -22,7 +30,7 @@ public class ArticleParam {
 
     private String username;
 
+    private Date createTime;
+
     private Date updateTime;
-
-
 }

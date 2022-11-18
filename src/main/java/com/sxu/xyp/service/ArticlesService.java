@@ -21,4 +21,7 @@ public interface ArticlesService extends IService<Articles> {
 
     // 列出所有为展开的帖子的帖子
     List<ArticleParam> listAll();
+
+    // 根据id获取帖子详情
+    ArticleParam detail(Long articleId);
 }

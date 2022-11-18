@@ -3,6 +3,8 @@ package com.sxu.xyp.service;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author 86187
 * @description 针对表【article_label(帖子_标签表)】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ArticleLabelService extends IService<ArticleLabel> {
 
+    List<String> getAllLabelID(Long id);
 }
