@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -11,6 +14,8 @@ import java.io.Serializable;
  * @TableName favorties
  */
 @TableName(value ="favorties")
+@Data
+@AllArgsConstructor
 public class Favorties implements Serializable {
     /**
      * 用户ID

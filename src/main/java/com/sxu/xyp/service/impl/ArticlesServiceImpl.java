@@ -3,18 +3,16 @@ package com.sxu.xyp.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sxu.xyp.model.domain.Favorties;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
-import com.sxu.xyp.service.ArticleLabelService;
-import com.sxu.xyp.service.ArticlesService;
+import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
-import com.sxu.xyp.service.LabelsService;
 
-import com.sxu.xyp.service.UserService;
 import org.springframework.stereotype.Service;
 
 
@@ -43,6 +41,8 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     @Resource
     ArticlesMapper articlesMapper;
 
+    @Resource
+    FavortiesService favortiesService;
 
     @Override
     public Long add(AddArticleParams addArticleParams, UserDTO user) {
@@ -73,7 +73,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public Boolean remove(Long articleId) {
-        if (this.removeById(articleId) && articleLabelService.removeById(articleId)) {
+        if (this.removeById(articleId) && articleLabelService.removeById(articleId) && favortiesService.deleteByArticleId(articleId)) {
             return true;
         }
         return false;

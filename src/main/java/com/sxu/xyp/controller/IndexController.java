@@ -34,4 +34,32 @@ public class IndexController {
         List<Banner> list = bannerService.list();
         return ResultUtil.success(list);
     }
+
+    @ApiOperation(value = "热榜")
+    @GetMapping("/hot")
+    public BaseResponse<Object> hot(){
+
+        return ResultUtil.success(null);
+    }
+
+    @ApiOperation(value = "实时")
+    @GetMapping("/realtime")
+    public BaseResponse<Object> realtime(){
+
+        return ResultUtil.success(null);
+    }
+
+    @ApiOperation(value = "推荐")
+    @GetMapping("/recommend")
+    public BaseResponse<Object> recommend(){
+
+        return ResultUtil.success(null);
+    }
+
+    @ApiOperation(value = "作者榜单")
+    @GetMapping("/userList")
+    public BaseResponse<Object> userList(){
+
+        return ResultUtil.success(null);
+    }
 }

@@ -11,6 +11,7 @@ import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -41,11 +42,26 @@ public class ArticleController {
     @Resource
     LabelsService labelsService;
 
+    @ApiOperation(value = "列出我的帖子")
     @PostMapping("/listMyArticles")
     public BaseResponse<List<ArticleParam>> myArticles(HttpServletRequest request) {
         return ResultUtil.success(articlesService.listMyArticles(request));
     }
 
+
+    @ApiOperation(value = "列出所有帖子")
+    @PostMapping("/list")
+    public BaseResponse<List<ArticleParam>> list() {
+        return ResultUtil.success(articlesService.listAll());
+    }
+
+    @ApiOperation(value = "点击帖子显示详情")
+    @PostMapping("/detail")
+    public BaseResponse<ArticleParam> detail(@RequestParam Long articleId) {
+        return ResultUtil.success(articlesService.detail(articleId));
+    }
+
+    @ApiOperation(value = "添加帖子")
     @PostMapping("/add")
     public BaseResponse<Articles> add(@RequestBody AddArticleParams addArticleParams, HttpServletRequest request) {
         Long articleId = articlesService.add(addArticleParams, userService.toUserDTO(request));
@@ -54,6 +70,7 @@ public class ArticleController {
     }
 
 
+    @ApiOperation(value = "删除帖子")
     @DeleteMapping("/remove")
     public BaseResponse<Boolean> remove(@RequestParam Long articleId) {
         if (!articlesService.remove(articleId)) {
@@ -62,12 +79,7 @@ public class ArticleController {
         return ResultUtil.success(true);
     }
 
-    @PostMapping("/list")
-    public BaseResponse<List<ArticleParam>> list() {
-        return ResultUtil.success(articlesService.listAll());
-    }
-
-    //只能更新内容，摘要
+    @ApiOperation(value = "更新帖子")
     @PostMapping("/update")
     public BaseResponse<Articles> update(@RequestBody UpdateArticleParams updateArticleParams,HttpServletRequest request) {
         String token = request.getHeader("authorization");
@@ -77,12 +89,13 @@ public class ArticleController {
         return ResultUtil.success(articlesService.update(updateArticleParams));
     }
 
+    @ApiOperation(value = "收藏帖子")
+    @PostMapping("/collect")
+    public BaseResponse<ArticleParam> collect(@RequestParam Long articleId) {
 
-    //显示详情
-    @PostMapping("/detail")
-    public BaseResponse<ArticleParam> detail(@RequestParam Long articleId) {
         return ResultUtil.success(articlesService.detail(articleId));
     }
+
 
     @GetMapping("/search")
     public BaseResponse<Articles> search() {

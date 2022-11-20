@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 * @createDate 2022-11-14 22:06:41
 */
 @Service
-public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
-    implements CommentsService{
+public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> implements CommentsService{
 
 }
 
