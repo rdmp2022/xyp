@@ -8,6 +8,7 @@ import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.params.ArticleParam;
+import com.sxu.xyp.model.params.UpdateArticleParams;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,6 @@ public class ArticleController {
     @Resource
     UserService userService;
 
-    @Resource
-    ArticleLabelService articleLabelService;
 
     @Resource
     CommentsService commentsService;
@@ -42,12 +41,13 @@ public class ArticleController {
     @Resource
     LabelsService labelsService;
 
+    @PostMapping("/listMyArticles")
+    public BaseResponse<List<ArticleParam>> myArticles(HttpServletRequest request) {
+        return ResultUtil.success(articlesService.listMyArticles(request));
+    }
+
     @PostMapping("/add")
     public BaseResponse<Articles> add(@RequestBody AddArticleParams addArticleParams, HttpServletRequest request) {
-        String token = request.getHeader("authorization");
-        if (StrUtil.isBlank(token)) {
-            throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后发布帖子");
-        }
         Long articleId = articlesService.add(addArticleParams, userService.toUserDTO(request));
         Articles article = articlesService.getById(articleId);
         return ResultUtil.success(article);
@@ -62,18 +62,24 @@ public class ArticleController {
         return ResultUtil.success(true);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public BaseResponse<List<ArticleParam>> list() {
         return ResultUtil.success(articlesService.listAll());
     }
 
-    @GetMapping("/update")
-    public BaseResponse<Articles> UPDATE() {
-        return null;
+    //只能更新内容，摘要
+    @PostMapping("/update")
+    public BaseResponse<Articles> update(@RequestBody UpdateArticleParams updateArticleParams,HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        if (StrUtil.isBlank(token)) {
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后发布帖子");
+        }
+        return ResultUtil.success(articlesService.update(updateArticleParams));
     }
 
 
-    @GetMapping("/detail")
+    //显示详情
+    @PostMapping("/detail")
     public BaseResponse<ArticleParam> detail(@RequestParam Long articleId) {
         return ResultUtil.success(articlesService.detail(articleId));
     }

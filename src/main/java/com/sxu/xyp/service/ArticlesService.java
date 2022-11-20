@@ -5,7 +5,9 @@ import com.sxu.xyp.model.domain.Articles;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
+import com.sxu.xyp.model.params.UpdateArticleParams;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,9 +21,16 @@ public interface ArticlesService extends IService<Articles> {
 
     Boolean remove(Long articleId);
 
-    // 列出所有为展开的帖子的帖子
+    // 列出所有未展开的帖子的帖子
     List<ArticleParam> listAll();
 
     // 根据id获取帖子详情
     ArticleParam detail(Long articleId);
+
+    Articles update(UpdateArticleParams updateArticleParams);
+
+    //只显示我的帖子
+    List<ArticleParam> listMyArticles(HttpServletRequest request);
+
+    List<ArticleParam> toArticleParam(List<Articles> articles);
 }

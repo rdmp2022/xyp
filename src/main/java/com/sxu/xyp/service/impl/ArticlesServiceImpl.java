@@ -1,12 +1,14 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
+import com.sxu.xyp.model.params.UpdateArticleParams;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.service.ArticlesService;
 import com.sxu.xyp.mapper.ArticlesMapper;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,6 +39,9 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Resource
     UserService userService;
+
+    @Resource
+    ArticlesMapper articlesMapper;
 
 
     @Override
@@ -76,14 +82,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     @Override
     public List<ArticleParam> listAll() {
         List<Articles> articlesList = this.list();
-        List<ArticleParam> articlesParam = BeanUtil.copyToList(articlesList, ArticleParam.class);
-        for (ArticleParam articleParam : articlesParam) {
-            //作者名称
-            articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
-            //标签
-            List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
-            articleParam.setTags(list);
-        }
+        List<ArticleParam> articlesParam = this.toArticleParam(articlesList);
         return articlesParam;
     }
 
@@ -96,6 +95,36 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         articleParam.setTags(list);
         return articleParam;
     }
+
+    @Override
+    public Articles update(UpdateArticleParams updateArticleParams) {
+        Articles article = this.getById(updateArticleParams.getArticleId());
+        article.setContent(updateArticleParams.getContent());
+        article.setSummary(updateArticleParams.getSummary());
+        return article;
+    }
+
+    @Override
+    public List<ArticleParam> listMyArticles(HttpServletRequest request) {
+        UserDTO user = userService.toUserDTO(request);
+        List<Articles> articles = articlesMapper.selectList(new QueryWrapper<Articles>().eq("user_id", user.getUserId()));
+        List<ArticleParam> myArticlesParam = this.toArticleParam(articles);
+        return myArticlesParam;
+    }
+
+    @Override
+    public List<ArticleParam> toArticleParam(List<Articles> articles) {
+        List<ArticleParam> myArticlesParam = BeanUtil.copyToList(articles, ArticleParam.class);
+        for (ArticleParam articleParam : myArticlesParam) {
+            //作者名称
+            articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
+            //标签
+            List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+            articleParam.setTags(list);
+        }
+        return myArticlesParam;
+    }
+
 
 }
 
