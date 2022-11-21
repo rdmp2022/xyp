@@ -194,9 +194,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String lastFilePath;
         String newFileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + suffix;
         String folderName = File.separator + "avatars" + File.separator;
-//        String relativePath = folderName + DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime) + File.separator;
-        String relativePath = DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime) + File.separator;
-        String filePath = "/www/wwwroot/xyp/temp" + relativePath;
+        String relativePathOut = DateUtil.year(dateTime) + File.separator + DateUtil.month(dateTime) + File.separator + DateUtil.weekOfMonth(dateTime) + File.separator;
+        String relativePathIn = folderName + relativePathOut;
+        String filePath = "/www/wwwroot/xyp/temp" + relativePathIn;
         String fileUrl = null;
         File targetFile = new File(filePath);
         if (!targetFile.exists()) {
@@ -208,7 +208,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             out = new FileOutputStream(lastFilePath);
             out.write(multipartFile.getBytes());
 //            fileUrl = "https://xiaoyuanpai.sjxbbd.top" + relativePath + newFileName;
-            fileUrl = "https://xiaoyuanpai.sjxbbd.top/avatar/" + relativePath + newFileName;
+            fileUrl = "https://xiaoyuanpai.sjxbbd.top/avatar/" + relativePathOut + newFileName;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
