@@ -207,7 +207,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             out = new FileOutputStream(lastFilePath);
             out.write(multipartFile.getBytes());
 //            fileUrl = "https://xiaoyuanpai.sjxbbd.top" + relativePath + newFileName;
-            fileUrl = "https://xiaoyuanpai.sjxbbd.top/avatar" + newFileName;
+            fileUrl = "https://xiaoyuanpai.sjxbbd.top/avatar/" + newFileName;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
