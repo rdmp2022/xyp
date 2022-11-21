@@ -45,11 +45,11 @@ public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties
         }
         //文章收藏数加一
         Articles article = articlesService.getById(articleId);
-        Long count = article.getCommentCount();
+        Long count = article.getFavoritesCount();
         UpdateWrapper<Articles> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("article_id",articleId);
         Articles articles = new Articles();
-        articles.setCommentCount(count + 1);
+        articles.setFavoritesCount(count + 1);
         articlesService.update(articles,updateWrapper);
         //存入数据库
         Favorties favorties = new Favorties(userId, articleId);
@@ -67,12 +67,12 @@ public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties
         }
         //文章收藏数减一
         Articles article = articlesService.getById(articleId);
-        Long count = article.getCommentCount();
+        Long count = article.getFavoritesCount();
         if (count > 0) {
             UpdateWrapper<Articles> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("article_id",articleId);
             Articles articles = new Articles();
-            articles.setCommentCount(count - 1);
+            articles.setFavoritesCount(count - 1);
             articlesService.update(articles,updateWrapper);
         }
 
