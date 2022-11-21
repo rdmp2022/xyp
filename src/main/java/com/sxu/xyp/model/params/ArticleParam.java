@@ -33,4 +33,6 @@ public class ArticleParam {
     private Date createTime;
 
     private Date updateTime;
+
+    private Integer isFavorite;
 }

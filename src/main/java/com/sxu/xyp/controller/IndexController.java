@@ -5,7 +5,9 @@ import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
 
 import com.sxu.xyp.model.domain.Banner;
+import com.sxu.xyp.model.params.user.UserIndexParam;
 import com.sxu.xyp.service.BannerService;
+import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,9 @@ public class IndexController {
 
     @Resource
     BannerService bannerService;
+
+    @Resource
+    UserService userService;
 
     @ApiOperation(value = "获取首页轮播图")
     @GetMapping("/banner")
@@ -56,9 +61,11 @@ public class IndexController {
         return ResultUtil.success(null);
     }
 
+
     @ApiOperation(value = "作者榜单")
     @GetMapping("/userList")
-    public BaseResponse<Object> userList(){
+    public BaseResponse<List<UserIndexParam>> userList(){
+        // 文章收藏数加起来
 
         return ResultUtil.success(null);
     }

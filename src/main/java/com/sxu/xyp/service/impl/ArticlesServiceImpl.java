@@ -1,8 +1,11 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sxu.xyp.common.ErrorCode;
+import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.Favorties;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
@@ -80,9 +83,9 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public List<ArticleParam> listAll() {
+    public List<ArticleParam> listAll(HttpServletRequest request) {
         List<Articles> articlesList = this.list();
-        List<ArticleParam> articlesParam = this.toArticleParam(articlesList);
+        List<ArticleParam> articlesParam = this.toArticleParam(articlesList,request);
         return articlesParam;
     }
 
@@ -108,18 +111,39 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     public List<ArticleParam> listMyArticles(HttpServletRequest request) {
         UserDTO user = userService.toUserDTO(request);
         List<Articles> articles = articlesMapper.selectList(new QueryWrapper<Articles>().eq("user_id", user.getUserId()));
-        List<ArticleParam> myArticlesParam = this.toArticleParam(articles);
+        List<ArticleParam> myArticlesParam = this.toArticleParam(articles,request);
         return myArticlesParam;
     }
 
     @Override
-    public List<ArticleParam> toArticleParam(List<Articles> articles) {
+    public List<ArticleParam> toArticleParam(List<Articles> articles, HttpServletRequest request) {
+
+        //是否显示收藏
+        UserDTO userDTO = null;
+        int flag = 0;
+        if (request == null){
+            flag = 0;
+        } else if (StrUtil.isBlank(request.getHeader("authorization"))) {
+            flag = 0;
+        }else {
+            userDTO = userService.toUserDTO(request);
+            flag = 1;
+        }
         List<ArticleParam> myArticlesParam = BeanUtil.copyToList(articles, ArticleParam.class);
         for (ArticleParam articleParam : myArticlesParam) {
             //作者名称
             articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
             //标签
             List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+            if (flag == 1){
+                if (favortiesService.isFavorite(userDTO.getUserId(),articleParam.getArticleId())) {
+                    articleParam.setIsFavorite(1);
+                }else {
+                    articleParam.setIsFavorite(0);
+                }
+            }else {
+                articleParam.setIsFavorite(0);
+            }
             articleParam.setTags(list);
         }
         return myArticlesParam;

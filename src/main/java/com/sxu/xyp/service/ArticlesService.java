@@ -22,7 +22,7 @@ public interface ArticlesService extends IService<Articles> {
     Boolean remove(Long articleId);
 
     // 列出所有未展开的帖子的帖子
-    List<ArticleParam> listAll();
+    List<ArticleParam> listAll(HttpServletRequest request);
 
     // 根据id获取帖子详情
     ArticleParam detail(Long articleId);
@@ -32,5 +32,8 @@ public interface ArticlesService extends IService<Articles> {
     //只显示我的帖子
     List<ArticleParam> listMyArticles(HttpServletRequest request);
 
-    List<ArticleParam> toArticleParam(List<Articles> articles);
+    //判断是否收藏
+
+
+    List<ArticleParam> toArticleParam(List<Articles> articles,HttpServletRequest request);
 }

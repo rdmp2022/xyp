@@ -1,6 +1,7 @@
 package com.sxu.xyp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
@@ -40,15 +41,19 @@ public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties
         UserDTO userDTO = userService.toUserDTO(request);
         Long userId = userDTO.getUserId();
         if (this.count(new QueryWrapper<Favorties>().eq("user_id", userId).eq("article_id", articleId)) != 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "你已经收藏过该文章");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "已收藏该文章");
         }
-        Favorties favorties = new Favorties(userId, articleId);
-        Articles articles = articlesService.getById(articleId);
-        Long count = articles.getCommentCount();
+        //文章收藏数加一
+        Articles article = articlesService.getById(articleId);
+        Long count = article.getCommentCount();
+        UpdateWrapper<Articles> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("article_id",articleId);
+        Articles articles = new Articles();
         articles.setCommentCount(count + 1);
-        if (favortiesMapper.insert(favorties) != 1) {
-            throw  new BusinessException(ErrorCode.PARAMS_ERROR, "系统错误");
-        }
+        articlesService.update(articles,updateWrapper);
+        //存入数据库
+        Favorties favorties = new Favorties(userId, articleId);
+        favortiesMapper.insert(favorties);
         return true;
     }
 
@@ -58,14 +63,19 @@ public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties
         UserDTO userDTO = userService.toUserDTO(request);
         Long userId = userDTO.getUserId();
         if (this.count(new QueryWrapper<Favorties>().eq("user_id", userId).eq("article_id", articleId)) == 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "你已经收藏过该文章");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "未收藏该文章");
         }
-        Favorties favorties = new Favorties(userId, articleId);
-        Articles articles = articlesService.getById(articleId);
-        Long count = articles.getCommentCount();
+        //文章收藏数减一
+        Articles article = articlesService.getById(articleId);
+        Long count = article.getCommentCount();
         if (count > 0) {
+            UpdateWrapper<Articles> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("article_id",articleId);
+            Articles articles = new Articles();
             articles.setCommentCount(count - 1);
+            articlesService.update(articles,updateWrapper);
         }
+
         favortiesMapper.delete(new QueryWrapper<Favorties>().eq("user_id", userId).eq("article_id", articleId));
         return true;
     }
@@ -79,8 +89,14 @@ public class FavortiesServiceImpl extends ServiceImpl<FavortiesMapper, Favorties
         return false;
     }
 
-
-    // 删除文章时删除对应的收藏
+    @Override
+    public Boolean isFavorite(Long userId, long articleId) {
+        Integer count = favortiesMapper.selectCount(new QueryWrapper<Favorties>().eq("user_id", userId).eq("article_id", articleId));
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
 
 }
 

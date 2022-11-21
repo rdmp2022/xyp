@@ -1,5 +1,6 @@
 package com.sxu.xyp.service;
 
+
 import com.sxu.xyp.model.domain.Favorties;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +17,6 @@ public interface FavortiesService extends IService<Favorties> {
     Boolean UnCollect(Long articleId, HttpServletRequest request);
 
     Boolean deleteByArticleId(Long articleId);
+
+    Boolean isFavorite(Long userId, long articleId);
 }

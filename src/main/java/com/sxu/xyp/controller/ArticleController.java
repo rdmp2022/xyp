@@ -37,10 +37,7 @@ public class ArticleController {
 
 
     @Resource
-    CommentsService commentsService;
-
-    @Resource
-    LabelsService labelsService;
+    FavortiesService favortiesService;
 
     @ApiOperation(value = "列出我的帖子")
     @PostMapping("/listMyArticles")
@@ -51,8 +48,8 @@ public class ArticleController {
 
     @ApiOperation(value = "列出所有帖子")
     @PostMapping("/list")
-    public BaseResponse<List<ArticleParam>> list() {
-        return ResultUtil.success(articlesService.listAll());
+    public BaseResponse<List<ArticleParam>> list(HttpServletRequest request) {
+        return ResultUtil.success(articlesService.listAll(request));
     }
 
     @ApiOperation(value = "点击帖子显示详情")
@@ -91,9 +88,14 @@ public class ArticleController {
 
     @ApiOperation(value = "收藏帖子")
     @PostMapping("/collect")
-    public BaseResponse<ArticleParam> collect(@RequestParam Long articleId) {
+    public BaseResponse<Boolean> collect(@RequestParam Long articleId, HttpServletRequest request) {
+        return ResultUtil.success(favortiesService.collect(articleId, request));
+    }
 
-        return ResultUtil.success(articlesService.detail(articleId));
+    @ApiOperation(value = "取消收藏")
+    @PostMapping("/unCollect")
+    public BaseResponse<Boolean> unCollect(@RequestParam Long articleId, HttpServletRequest request) {
+        return ResultUtil.success(favortiesService.UnCollect(articleId, request));
     }
 
 
