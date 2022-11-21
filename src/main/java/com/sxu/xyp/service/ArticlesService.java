@@ -25,7 +25,7 @@ public interface ArticlesService extends IService<Articles> {
     List<ArticleParam> listAll(HttpServletRequest request);
 
     // 根据id获取帖子详情
-    ArticleParam detail(Long articleId);
+    ArticleParam detail(Long articleId, HttpServletRequest request);
 
     Articles update(UpdateArticleParams updateArticleParams);
 
@@ -34,6 +34,7 @@ public interface ArticlesService extends IService<Articles> {
 
     //判断是否收藏
 
+    List<ArticleParam> toArticleParams(List<Articles> articles,HttpServletRequest request);
 
-    List<ArticleParam> toArticleParam(List<Articles> articles,HttpServletRequest request);
+    ArticleParam toArticleParam(Articles article,HttpServletRequest request);
 }

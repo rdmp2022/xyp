@@ -23,7 +23,7 @@ import java.util.List;
  * @author: author
  * @date: 2022/11/15 9:59
  */
-@Api(value = "首页",tags = "首页展示的相关接口")
+@Api(value = "首页", tags = "首页展示的相关接口")
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/post")
@@ -54,8 +54,8 @@ public class ArticleController {
 
     @ApiOperation(value = "点击帖子显示详情")
     @PostMapping("/detail")
-    public BaseResponse<ArticleParam> detail(@RequestParam Long articleId) {
-        return ResultUtil.success(articlesService.detail(articleId));
+    public BaseResponse<ArticleParam> detail(@RequestParam Long articleId, HttpServletRequest request) {
+        return ResultUtil.success(articlesService.detail(articleId, request));
     }
 
     @ApiOperation(value = "添加帖子")
@@ -78,7 +78,7 @@ public class ArticleController {
 
     @ApiOperation(value = "更新帖子")
     @PostMapping("/update")
-    public BaseResponse<Articles> update(@RequestBody UpdateArticleParams updateArticleParams,HttpServletRequest request) {
+    public BaseResponse<Articles> update(@RequestBody UpdateArticleParams updateArticleParams, HttpServletRequest request) {
         String token = request.getHeader("authorization");
         if (StrUtil.isBlank(token)) {
             throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后发布帖子");

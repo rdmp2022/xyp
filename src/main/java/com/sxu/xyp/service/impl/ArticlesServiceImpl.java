@@ -85,19 +85,17 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     @Override
     public List<ArticleParam> listAll(HttpServletRequest request) {
         List<Articles> articlesList = this.list();
-        List<ArticleParam> articlesParam = this.toArticleParam(articlesList,request);
+        List<ArticleParam> articlesParam = this.toArticleParams(articlesList, request);
         return articlesParam;
     }
 
     @Override
-    public ArticleParam detail(Long articleId) {
+    public ArticleParam detail(Long articleId, HttpServletRequest request) {
         Articles articles = this.getById(articleId);
-        ArticleParam articleParam = BeanUtil.copyProperties(articles, ArticleParam.class);
-        articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
-        List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
-        articleParam.setTags(list);
+        ArticleParam articleParam = this.toArticleParam(articles, request);
         return articleParam;
     }
+
 
     @Override
     public Articles update(UpdateArticleParams updateArticleParams) {
@@ -111,21 +109,21 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     public List<ArticleParam> listMyArticles(HttpServletRequest request) {
         UserDTO user = userService.toUserDTO(request);
         List<Articles> articles = articlesMapper.selectList(new QueryWrapper<Articles>().eq("user_id", user.getUserId()));
-        List<ArticleParam> myArticlesParam = this.toArticleParam(articles,request);
+        List<ArticleParam> myArticlesParam = this.toArticleParams(articles, request);
         return myArticlesParam;
     }
 
     @Override
-    public List<ArticleParam> toArticleParam(List<Articles> articles, HttpServletRequest request) {
+    public List<ArticleParam> toArticleParams(List<Articles> articles, HttpServletRequest request) {
 
         //是否显示收藏
         UserDTO userDTO = null;
         int flag = 0;
-        if (request == null){
+        if (request == null) {
             flag = 0;
         } else if (StrUtil.isBlank(request.getHeader("authorization"))) {
             flag = 0;
-        }else {
+        } else {
             userDTO = userService.toUserDTO(request);
             flag = 1;
         }
@@ -135,18 +133,50 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
             articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
             //标签
             List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
-            if (flag == 1){
-                if (favortiesService.isFavorite(userDTO.getUserId(),articleParam.getArticleId())) {
+            if (flag == 1) {
+                if (favortiesService.isFavorite(userDTO.getUserId(), articleParam.getArticleId())) {
                     articleParam.setIsFavorite(1);
-                }else {
+                } else {
                     articleParam.setIsFavorite(0);
                 }
-            }else {
+            } else {
                 articleParam.setIsFavorite(0);
             }
             articleParam.setTags(list);
         }
         return myArticlesParam;
+    }
+
+    @Override
+    public ArticleParam toArticleParam(Articles article, HttpServletRequest request) {
+        //是否显示收藏
+        UserDTO userDTO = null;
+        int flag = 0;
+        if (request == null) {
+            flag = 0;
+        } else if (StrUtil.isBlank(request.getHeader("authorization"))) {
+            flag = 0;
+        } else {
+            userDTO = userService.toUserDTO(request);
+            flag = 1;
+        }
+        ArticleParam articleParam = BeanUtil.copyProperties(article, ArticleParam.class);
+        //作者名称
+        articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
+        //标签
+        List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+        if (flag == 1) {
+            if (favortiesService.isFavorite(userDTO.getUserId(), articleParam.getArticleId())) {
+                articleParam.setIsFavorite(1);
+            } else {
+                articleParam.setIsFavorite(0);
+            }
+        } else {
+            articleParam.setIsFavorite(0);
+        }
+        articleParam.setTags(list);
+
+        return articleParam;
     }
 
 
