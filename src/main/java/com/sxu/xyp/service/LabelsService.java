@@ -3,6 +3,8 @@ package com.sxu.xyp.service;
 import com.sxu.xyp.model.domain.Labels;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author 86187
 * @description 针对表【labels(标签表)】的数据库操作Service
@@ -15,4 +17,7 @@ public interface LabelsService extends IService<Labels> {
     Long addLabel(String label);
 
     Boolean searchLabel(String label);
+
+    List<Labels> labelList();
+
 }

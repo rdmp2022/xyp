@@ -8,6 +8,7 @@ import com.sxu.xyp.mapper.LabelsMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author 86187
@@ -47,6 +48,13 @@ public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
         }
         return false;
     }
+
+    @Override
+    public List<Labels> labelList() {
+        List<Labels> labels = labelsMapper.selectList(null);
+        return labels;
+    }
+
 }
 
 
