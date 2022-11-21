@@ -4,6 +4,7 @@ import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.model.domain.Labels;
 import com.sxu.xyp.model.params.ArticleParam;
+import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.LabelsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,7 @@ public class LabelController {
 
     @ApiOperation(value = "展示所有标签")
     @PostMapping("/list")
-    public BaseResponse<List<Labels>> list() {
+    public BaseResponse<List<LabelParam>> list() {
         return ResultUtil.success(labelsService.labelList());
     }
 

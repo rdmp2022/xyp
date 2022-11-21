@@ -3,11 +3,14 @@ package com.sxu.xyp.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.domain.Labels;
+import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.LabelsService;
 import com.sxu.xyp.mapper.LabelsMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -50,10 +53,19 @@ public class LabelsServiceImpl extends ServiceImpl<LabelsMapper, Labels>
     }
 
     @Override
-    public List<Labels> labelList() {
+    public List<LabelParam> labelList() {
         List<Labels> labels = labelsMapper.selectList(null);
-        return labels;
+        ArrayList<LabelParam> labelParams = new ArrayList<>();
+        for (Labels label : labels) {
+            LabelParam labelParam = new LabelParam();
+
+            labelParam.setValue(Long.toString(label.getLabelId()));
+            labelParam.setLabel(label.getLabelName());
+            labelParams.add(labelParam);
+        }
+        return labelParams;
     }
+
 
 }
 

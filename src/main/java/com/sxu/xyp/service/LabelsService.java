@@ -2,6 +2,7 @@ package com.sxu.xyp.service;
 
 import com.sxu.xyp.model.domain.Labels;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sxu.xyp.model.params.label.LabelParam;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface LabelsService extends IService<Labels> {
 
     Boolean searchLabel(String label);
 
-    List<Labels> labelList();
+    List<LabelParam> labelList();
 
 }
