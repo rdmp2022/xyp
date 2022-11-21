@@ -32,7 +32,7 @@ public class LabelController {
 
     @ApiOperation(value = "展示所有标签")
     @PostMapping("/list")
-    public BaseResponse<List<Labels>> list(HttpServletRequest request) {
+    public BaseResponse<List<Labels>> list() {
         return ResultUtil.success(labelsService.labelList());
     }
 
