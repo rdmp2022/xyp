@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
-import com.sxu.xyp.model.domain.Favorties;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
@@ -51,6 +50,9 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     public Long add(AddArticleParams addArticleParams, UserDTO user) {
         Articles article = new Articles();
         article.setTitle(addArticleParams.getTitle());
+        if (addArticleParams.getContent() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"文章内容错误");
+        }
         article.setContent(addArticleParams.getContent());
         article.setSummary(addArticleParams.getSummary());
         article.setViews(0L);
