@@ -5,6 +5,7 @@ import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
+import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.params.ArticleParam;
@@ -112,4 +113,12 @@ public class ArticleController {
     }
 
 
+    @GetMapping("/findUser")
+    public BaseResponse<UserDTO> findUserByArticleId(@RequestParam Long articleId, HttpServletRequest request){
+        if (articleId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        }
+        UserDTO userByArticleId = articlesService.findUserByArticleId(articleId, request);
+        return ResultUtil.success(userByArticleId);
+    }
 }

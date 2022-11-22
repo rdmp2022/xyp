@@ -1,7 +1,6 @@
 package com.sxu.xyp.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.UUID;
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
@@ -17,14 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
-@Api(value = "用户API")
+@Api(value = "用户API", tags = "用户相关接口")
 public class UserController {
 
     @Resource
@@ -50,7 +47,6 @@ public class UserController {
         }
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
-
         Map<String, Object> userMap = userService.userLogin(userAccount, userPassword);
         return ResultUtil.success(userMap);
     }

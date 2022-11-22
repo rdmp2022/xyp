@@ -39,4 +39,6 @@ public interface ArticlesService extends IService<Articles> {
     List<ArticleParam> toArticleParams(List<Articles> articles,HttpServletRequest request);
 
     ArticleParam toArticleParam(Articles article,HttpServletRequest request);
+
+    UserDTO findUserByArticleId(Long articleId, HttpServletRequest request);
 }
