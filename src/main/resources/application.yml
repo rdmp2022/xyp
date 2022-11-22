@@ -16,7 +16,7 @@ spring:
     timeout: 86400
   jackson:
     time-zone: GMT-6
-    date-format: yyyy-MM-dd HH:mm:ss
+
 server:
   port: 9652
   servlet:
