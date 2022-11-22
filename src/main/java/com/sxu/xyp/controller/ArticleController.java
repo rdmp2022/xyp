@@ -124,11 +124,11 @@ public class ArticleController {
     }
 
     @GetMapping("/findArticle")
-    public BaseResponse<List<Articles>> findArticlesByUserId(@RequestParam Long userId, HttpServletRequest request){
+    public BaseResponse<List<ArticleParam>> findArticlesByUserId(@RequestParam Long userId, HttpServletRequest request){
         if (userId == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        List<Articles> articlesByUserId = articlesService.findArticlesByUserId(userId, request);
+        List<ArticleParam> articlesByUserId = articlesService.findArticlesByUserId(userId, request);
         return ResultUtil.success(articlesByUserId);
     }
 }

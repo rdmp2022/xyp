@@ -19,6 +19,7 @@ import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
 
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -165,6 +166,25 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
+    public List<ArticleParam> toArticleParams(List<Articles> articles, Long userId) {
+
+        List<ArticleParam> myArticlesParam = BeanUtil.copyToList(articles, ArticleParam.class);
+        for (ArticleParam articleParam : myArticlesParam) {
+            //作者名称
+            articleParam.setUsername(userService.getById(articleParam.getUserId()).getUsername());
+            //标签
+            List<String> list = articleLabelService.getAllLabelID(articleParam.getArticleId());
+            if (favortiesService.isFavorite(userId, articleParam.getArticleId())) {
+                articleParam.setIsFavorite(1);
+            } else {
+                articleParam.setIsFavorite(0);
+            }
+            articleParam.setTags(list);
+        }
+        return myArticlesParam;
+    }
+
+    @Override
     public ArticleParam toArticleParam(Articles article, HttpServletRequest request) {
         //是否显示收藏
         UserDTO userDTO = null;
@@ -198,7 +218,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public UserDTO findUserByUserId(Long userId, HttpServletRequest request) {
-        if (userId == null || userId <= 0){
+        if (userId == null || userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User user = userService.getById(userId);
@@ -206,18 +226,18 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public List<Articles> findArticlesByUserId(Long userId, HttpServletRequest request) {
+    public List<ArticleParam> findArticlesByUserId(Long userId, HttpServletRequest request) {
         if (userId == null || userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         List<Articles> articlesList = this.list(queryWrapper);
-        if (articlesList == null){
-            return new ArrayList<>();
-        }
-        return articlesList;
+        List<ArticleParam> articleParamsList = this.toArticleParams(articlesList, userId);
+        //List<ArticleParam> articleParamsList = BeanUtil.copyToList(articlesList, ArticleParam.class);
+        return articleParamsList;
     }
+
 
 }
 
