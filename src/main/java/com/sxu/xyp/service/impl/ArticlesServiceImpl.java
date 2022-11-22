@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
+import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
@@ -179,6 +180,23 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         articleParam.setTags(list);
 
         return articleParam;
+    }
+
+    @Override
+    public UserDTO findUserByArticleId(Long articleId, HttpServletRequest request) {
+        if (articleId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        }
+        Articles article = this.getById(articleId);
+        Long userId = article.getUserId();
+        if (userId == null || userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+        User user = userService.getById(userId);
+        if (user == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+        return BeanUtil.copyProperties(user, UserDTO.class);
     }
 
 
