@@ -1,5 +1,6 @@
 package com.sxu.xyp.model.params;
 
+import com.sxu.xyp.model.params.label.LabelParam;
 import lombok.Data;
 
 
@@ -19,6 +20,5 @@ public class AddArticleParams {
 
     private String content;
 
-    private List<String> tags;
-
+    private List<LabelParam> tags;
 }

@@ -14,6 +14,7 @@ import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
+import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
 
@@ -67,12 +68,12 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         // 标签操作
         // 用户id
         Long id = article.getArticleId();
-        List<String> tags = addArticleParams.getTags();
-        for (String tag : tags) {
+        List<LabelParam> tags = addArticleParams.getTags();
+        for (LabelParam tag : tags) {
             //标签id
-            Long labelId = labelsService.addLabel(tag);
+            Long labelId = labelsService.addLabel(tag.getLabel());
             if (labelId != 0L) {
-                ArticleLabel articleLabel = new ArticleLabel(id, labelId);
+                ArticleLabel articleLabel = new ArticleLabel(id, Long.parseLong(tag.getValue()));
                 articleLabelService.save(articleLabel);
             }
         }

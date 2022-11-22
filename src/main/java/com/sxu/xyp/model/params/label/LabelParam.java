@@ -9,6 +9,8 @@ import lombok.Data;
  */
 @Data
 public class LabelParam {
+    // id
     private String value;
+    // 标签的值
     private String label;
 }
