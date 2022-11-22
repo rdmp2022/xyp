@@ -237,6 +237,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return fileUrl;
     }
 
+    @Override
+    public UserDTO currentUser(HttpServletRequest request) {
+        if (request == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        UserDTO userDTO = toUserDTO(request);
+        if (userDTO == null){
+            throw new BusinessException(ErrorCode.LOGIN_ERROR);
+        }
+        Long loginUserId = userDTO.getUserId();
+        User user = this.getById(loginUserId);
+        UserDTO newUserDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        // 获取请求头中的token
+        String token = request.getHeader("authorization");
+        String tokenKey = LOGIN_USER_KEY + token;
+        redisTemplate.opsForHash().entries(tokenKey).put("userInfo", newUserDTO);
+        redisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.HOURS);
+        return newUserDTO;
+    }
+
     /**
      * 是否为管理员
      * @param request 含token的请求

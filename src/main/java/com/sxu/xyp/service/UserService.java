@@ -27,6 +27,8 @@ public interface UserService extends IService<User> {
 
     String updateAvatarUrl(MultipartFile multipartFile, HttpServletRequest request);
 
+    UserDTO currentUser(HttpServletRequest request);
+
 //    User getSafetyUser(User user);
 
 }
