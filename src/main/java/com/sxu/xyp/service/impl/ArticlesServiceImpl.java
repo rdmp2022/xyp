@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
+import com.sxu.xyp.model.domain.Favorties;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +53,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         Articles article = new Articles();
         article.setTitle(addArticleParams.getTitle());
         if (addArticleParams.getContent() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"文章内容错误");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章内容错误");
         }
         article.setContent(addArticleParams.getContent());
         article.setSummary(addArticleParams.getSummary());
@@ -89,6 +91,17 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         List<Articles> articlesList = this.list();
         List<ArticleParam> articlesParam = this.toArticleParams(articlesList, request);
         return articlesParam;
+    }
+
+    @Override
+    public List<ArticleParam> listCollect(HttpServletRequest request) {
+        Long userId = userService.toUserDTO(request).getUserId();
+        ArrayList<Articles> articles = new ArrayList<>();
+        List<Favorties> favortieList = favortiesService.list(new QueryWrapper<Favorties>().eq("user_id", userId));
+        for (Favorties favorties : favortieList) {
+            articles.add(this.getById(favorties.getArticleId()));
+        }
+        return toArticleParams(articles, request);
     }
 
     @Override

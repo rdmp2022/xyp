@@ -24,6 +24,8 @@ public interface ArticlesService extends IService<Articles> {
     // 列出所有未展开的帖子的帖子
     List<ArticleParam> listAll(HttpServletRequest request);
 
+    List<ArticleParam> listCollect(HttpServletRequest request);
+
     // 根据id获取帖子详情
     ArticleParam detail(Long articleId, HttpServletRequest request);
 

@@ -45,6 +45,12 @@ public class ArticleController {
         return ResultUtil.success(articlesService.listMyArticles(request));
     }
 
+    @ApiOperation(value = "列出我的收藏")
+    @PostMapping("/listCollect")
+    public BaseResponse<List<ArticleParam>> myCollect(HttpServletRequest request) {
+        return ResultUtil.success(articlesService.listCollect(request));
+    }
+
 
     @ApiOperation(value = "列出所有帖子")
     @PostMapping("/list")
