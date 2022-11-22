@@ -14,9 +14,9 @@ spring:
   session:
     store-type: redis
     timeout: 86400
-  jackson:
-    time-zone: GMT-6
-    date-format: yyyy-MM-dd HH:mm:ss
+#  jackson:
+#    time-zone: GMT-6
+
 server:
   port: 9652
   servlet:
