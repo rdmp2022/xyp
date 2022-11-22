@@ -9,6 +9,7 @@ import com.sxu.xyp.model.params.UpdateArticleParams;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 86187
@@ -40,5 +41,5 @@ public interface ArticlesService extends IService<Articles> {
 
     ArticleParam toArticleParam(Articles article,HttpServletRequest request);
 
-    UserDTO findUserByArticleId(Long articleId, HttpServletRequest request);
+    Map<String, Object> findUserByArticleId(Long articleId, HttpServletRequest request);
 }

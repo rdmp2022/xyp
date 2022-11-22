@@ -11,6 +11,7 @@ import com.sxu.xyp.model.request.LoginRequest;
 import com.sxu.xyp.model.request.RegisterRequest;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody RegisterRequest registerRequest) {

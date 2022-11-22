@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.Favorties;
+import com.sxu.xyp.model.domain.User;
 import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 86187
@@ -193,8 +196,21 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public UserDTO findUserByArticleId(Long articleId, HttpServletRequest request) {
-        return null;
+    public Map<String, Object> findUserByArticleId(Long articleId, HttpServletRequest request) {
+        if (articleId == null || articleId <= 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Articles article = this.getById(articleId);
+        Long userId = article.getUserId();
+        User user = userService.getById(userId);
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        List<Articles> articlesList = this.baseMapper.selectList(queryWrapper);
+        Map<String, Object> map = new HashMap<>();
+        map.put("userInfo", userDTO);
+        map.put("articlesList", articlesList);
+        return map;
     }
 
 

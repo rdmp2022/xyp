@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description: TODO
@@ -114,11 +115,11 @@ public class ArticleController {
 
 
     @GetMapping("/findUser")
-    public BaseResponse<UserDTO> findUserByArticleId(@RequestParam Long articleId, HttpServletRequest request){
+    public BaseResponse<Map<String, Object>> findUserByArticleId(@RequestParam Long articleId, HttpServletRequest request){
         if (articleId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        UserDTO userByArticleId = articlesService.findUserByArticleId(articleId, request);
-        return ResultUtil.success(userByArticleId);
+        Map<String, Object> map = articlesService.findUserByArticleId(articleId, request);
+        return ResultUtil.success(map);
     }
 }

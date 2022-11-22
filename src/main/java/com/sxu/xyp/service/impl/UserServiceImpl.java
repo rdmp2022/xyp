@@ -118,16 +118,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         User user = userMapper.selectOne(queryWrapper);
         UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
-        //登录成功，将生成的token存入redis中
         String token = UUID.randomUUID().toString().replaceAll("-", "") + "";
         //存储
         String tokenKey = LOGIN_USER_KEY + token;
         Map<String, Object> userMap = new HashMap<>();
+
         userMap.put("token", token);
         userMap.put("userInfo", userDTO);
         redisTemplate.opsForHash().putAll(tokenKey, userMap);
         //设置token有效期
         redisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        Long expire_time = redisTemplate.getExpire(tokenKey);
+        userMap.put("expireTime", expire_time);
         return userMap;
     }
 
