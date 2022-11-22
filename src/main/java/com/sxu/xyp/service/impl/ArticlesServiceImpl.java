@@ -17,8 +17,6 @@ import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
 
 import org.springframework.stereotype.Service;
-
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -192,6 +190,11 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         articleParam.setTags(list);
 
         return articleParam;
+    }
+
+    @Override
+    public UserDTO findUserByArticleId(Long articleId, HttpServletRequest request) {
+        return null;
     }
 
 
