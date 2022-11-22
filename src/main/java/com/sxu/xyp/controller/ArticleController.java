@@ -115,11 +115,20 @@ public class ArticleController {
 
 
     @GetMapping("/findUser")
-    public BaseResponse<Map<String, Object>> findUserByArticleId(@RequestParam Long articleId, HttpServletRequest request){
-        if (articleId == null) {
+    public BaseResponse<UserDTO> findUserByUserId(@RequestParam Long userId, HttpServletRequest request){
+        if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        Map<String, Object> map = articlesService.findUserByArticleId(articleId, request);
-        return ResultUtil.success(map);
+        UserDTO userDTO = articlesService.findUserByUserId(userId, request);
+        return ResultUtil.success(userDTO);
+    }
+
+    @GetMapping("/findArticle")
+    public BaseResponse<List<Articles>> findArticlesByUserId(@RequestParam Long userId, HttpServletRequest request){
+        if (userId == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<Articles> articlesByUserId = articlesService.findArticlesByUserId(userId, request);
+        return ResultUtil.success(articlesByUserId);
     }
 }

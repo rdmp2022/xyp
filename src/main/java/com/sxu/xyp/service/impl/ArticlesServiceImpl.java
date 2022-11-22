@@ -196,23 +196,27 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public Map<String, Object> findUserByArticleId(Long articleId, HttpServletRequest request) {
-        if (articleId == null || articleId <= 0){
+    public UserDTO findUserByUserId(Long userId, HttpServletRequest request) {
+        if (userId == null || userId <= 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        Articles article = this.getById(articleId);
-        Long userId = article.getUserId();
         User user = userService.getById(userId);
-        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
-        QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId);
-        List<Articles> articlesList = this.baseMapper.selectList(queryWrapper);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userInfo", userDTO);
-        map.put("articlesList", articlesList);
-        return map;
+        return BeanUtil.copyProperties(user, UserDTO.class);
     }
 
+    @Override
+    public List<Articles> findArticlesByUserId(Long userId, HttpServletRequest request) {
+        if (userId == null || userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        List<Articles> articlesList = this.list(queryWrapper);
+        if (articlesList == null){
+            return new ArrayList<>();
+        }
+        return articlesList;
+    }
 
 }
 
