@@ -254,9 +254,22 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         List<Articles> articlesList = this.list(queryWrapper);
-        List<ArticleParam> articleParamsList = this.toArticleParams(articlesList, userId);
         //List<ArticleParam> articleParamsList = BeanUtil.copyToList(articlesList, ArticleParam.class);
-        return articleParamsList;
+        return this.toArticleParams(articlesList, userId);
+    }
+
+    @Override
+    public List<ArticleParam> findArticleByLabel(LabelParam labelParam, HttpServletRequest request) {
+        Long labelId = Long.parseLong(labelParam.getValue());
+        if (labelId == 0) {
+            return this.listAll(request);
+        }
+        List<Long> articleIds = articleLabelService.getArticleId(Long.parseLong(labelParam.getValue()));
+        ArrayList<Articles> articles = new ArrayList<>();
+        for (Long articleId : articleIds) {
+            articles.add(this.getById(articleId));
+        }
+        return this.toArticleParams(articles, request);
     }
 
 

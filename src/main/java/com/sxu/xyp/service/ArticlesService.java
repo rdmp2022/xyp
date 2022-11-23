@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
+import com.sxu.xyp.model.params.label.LabelParam;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,17 +20,21 @@ import java.util.Map;
 */
 public interface ArticlesService extends IService<Articles> {
 
+
     Long add(AddArticleParams addArticleParams, UserDTO user);
+
 
     Boolean delete(Long articleId, HttpServletRequest request);
 
     // 列出所有未展开的帖子的帖子
     List<ArticleParam> listAll(HttpServletRequest request);
 
+
     List<ArticleParam> listCollect(HttpServletRequest request);
 
     // 根据id获取帖子详情
     ArticleParam detail(Long articleId, HttpServletRequest request);
+
 
     Articles updateArticle(UpdateArticleParams updateArticleParams);
 
@@ -42,13 +47,21 @@ public interface ArticlesService extends IService<Articles> {
     // 根据时间排序
     List<ArticleParam> sortByTime(List<ArticleParam> articleParamList);
 
+
     List<ArticleParam> findFavoriteArticlesByUserId(@RequestParam Long userId);
+
 
     List<ArticleParam> toArticleParams(List<Articles> articles,Long userId);
 
+
     ArticleParam toArticleParam(Articles article,HttpServletRequest request);
+
 
     UserDTO findUserByUserId(Long userId, HttpServletRequest request);
 
+
     List<ArticleParam> findArticlesByUserId(Long userId, HttpServletRequest request);
+
+    // 通过标签展示帖子
+    List<ArticleParam> findArticleByLabel(LabelParam labelParam, HttpServletRequest request);
 }

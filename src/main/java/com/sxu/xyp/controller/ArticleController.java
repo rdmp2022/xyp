@@ -10,6 +10,7 @@ import com.sxu.xyp.model.params.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
+import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -114,6 +115,12 @@ public class ArticleController {
     @GetMapping("/findCollectById")
     public BaseResponse<List<ArticleParam>> findFavoriteArticlesByUserId(@RequestParam Long userId) {
         return ResultUtil.success(articlesService.findFavoriteArticlesByUserId(userId));
+    }
+
+    @ApiOperation(value = "通过标签查找文章")
+    @GetMapping("/findArticleByLabel")
+    public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestBody LabelParam labelParam,HttpServletRequest request) {
+        return ResultUtil.success(articlesService.findArticleByLabel(labelParam, request));
     }
 
 

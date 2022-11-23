@@ -32,7 +32,7 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
     @Override
     public List<String> getAllLabelID(Long id) {
         List<String> list = new ArrayList<>();
-        List<ArticleLabel> articleLabels = articleLabelMapper.selectBatchIds(Arrays.asList(id));
+        List<ArticleLabel> articleLabels = articleLabelMapper.selectBatchIds(Collections.singletonList(id));
         for (ArticleLabel articleLabel : articleLabels) {
             QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("label_id",articleLabel.getLabelId());
@@ -47,6 +47,18 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
         articleLabelMapper.delete(new QueryWrapper<ArticleLabel>().eq("article_id", articleId));
         return true;
     }
+
+    @Override
+    public List<Long> getArticleId(Long labelId) {
+        List<ArticleLabel> articleIds = articleLabelMapper.selectList(new QueryWrapper<ArticleLabel>().eq("label_id", labelId));
+        ArrayList<Long> list = new ArrayList<>();
+        for (ArticleLabel articleId : articleIds) {
+            list.add(articleId.getArticleId());
+        }
+        return list;
+    }
+
+
 }
 
 

@@ -15,4 +15,6 @@ public interface ArticleLabelService extends IService<ArticleLabel> {
     List<String> getAllLabelID(Long id);
 
     boolean deleteById(Long articleId);
+
+    List<Long> getArticleId(Long labelId);
 }
