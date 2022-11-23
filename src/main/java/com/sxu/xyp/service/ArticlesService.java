@@ -30,14 +30,16 @@ public interface ArticlesService extends IService<Articles> {
     // 根据id获取帖子详情
     ArticleParam detail(Long articleId, HttpServletRequest request);
 
-    Articles update(UpdateArticleParams updateArticleParams);
+    Articles updateArticle(UpdateArticleParams updateArticleParams);
 
     //只显示我的帖子
     List<ArticleParam> listMyArticles(HttpServletRequest request);
 
     //判断是否收藏
-
     List<ArticleParam> toArticleParams(List<Articles> articles,HttpServletRequest request);
+
+    // 根据时间排序
+    List<ArticleParam> sortByTime(List<ArticleParam> articleParamList);
 
     List<ArticleParam> toArticleParams(List<Articles> articles,Long userId);
 

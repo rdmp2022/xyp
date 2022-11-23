@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -42,12 +44,15 @@ class XypApplicationTests {
     @Test
     void testLogin(){
 
+
     }
 
     @Test
     void testAvatarUtl(){
-        ValueOperations<String, Object> operations = redisTemplate.opsForValue();
-        operations.set("test", "123", 3L, TimeUnit.MINUTES);
-        System.out.println(redisTemplate.getExpire("test"));
+        java.util.Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR_OF_DAY, 1);
+        System.out.println(c.getTime());
     }
 }

@@ -89,9 +89,9 @@ public class ArticleController {
     public BaseResponse<Articles> update(@RequestBody UpdateArticleParams updateArticleParams, HttpServletRequest request) {
         String token = request.getHeader("authorization");
         if (StrUtil.isBlank(token)) {
-            throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后发布帖子");
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "请登陆后修改自己的帖子");
         }
-        return ResultUtil.success(articlesService.update(updateArticleParams));
+        return ResultUtil.success(articlesService.updateArticle(updateArticleParams));
     }
 
     @ApiOperation(value = "收藏帖子")

@@ -1,6 +1,7 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,10 +23,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @author 86187
@@ -92,8 +91,10 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     @Override
     public List<ArticleParam> listAll(HttpServletRequest request) {
         List<Articles> articlesList = this.list();
-        List<ArticleParam> articlesParam = this.toArticleParams(articlesList, request);
-        return articlesParam;
+        List<ArticleParam> articlesParamList = this.toArticleParams(articlesList, request);
+        //Collections.reverse(articlesParamList);
+        this.sortByTime(articlesParamList);
+        return articlesParamList;
     }
 
     @Override
@@ -116,10 +117,11 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
 
     @Override
-    public Articles update(UpdateArticleParams updateArticleParams) {
+    public Articles updateArticle(UpdateArticleParams updateArticleParams) {
         Articles article = this.getById(updateArticleParams.getArticleId());
         article.setContent(updateArticleParams.getContent());
         article.setSummary(updateArticleParams.getSummary());
+        articlesMapper.update(article, new QueryWrapper<Articles>().eq("article_id",updateArticleParams.getArticleId()));
         return article;
     }
 
@@ -164,6 +166,19 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         }
         return myArticlesParam;
     }
+
+    @Override
+    public List<ArticleParam> sortByTime(List<ArticleParam> articleParamList) {
+        Collections.sort(articleParamList, new Comparator<ArticleParam>() {
+            @Override
+            public int compare(ArticleParam o1, ArticleParam o2) {
+                //return o1.getUpdateTime().compareTo(o2.getUpdateTime());
+                return o2.getCreateTime().compareTo(o1.getCreateTime());
+            }
+        });
+        return null;
+    }
+
 
     @Override
     public List<ArticleParam> toArticleParams(List<Articles> articles, Long userId) {
