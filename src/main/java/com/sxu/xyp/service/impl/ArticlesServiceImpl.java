@@ -52,9 +52,6 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     public Long add(AddArticleParams addArticleParams, UserDTO user) {
         Articles article = new Articles();
         article.setTitle(addArticleParams.getTitle());
-        if (addArticleParams.getContent() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章内容错误");
-        }
         article.setContent(addArticleParams.getContent());
         article.setSummary(addArticleParams.getSummary());
         article.setViews(0L);
@@ -79,7 +76,11 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public Boolean remove(Long articleId) {
+    public Boolean remove(Long articleId, HttpServletRequest request) {
+        Articles article = this.getById(articleId);
+        if (userService.toUserDTO(request).getUserId() != article.getUserId()) {
+            throw new BusinessException(ErrorCode.LOGIN_ERROR, "没有权限");
+        }
         if (this.removeById(articleId) && articleLabelService.removeById(articleId) && favortiesService.deleteByArticleId(articleId)) {
             return true;
         }

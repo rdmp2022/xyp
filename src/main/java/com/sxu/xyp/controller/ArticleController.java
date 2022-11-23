@@ -77,8 +77,8 @@ public class ArticleController {
 
     @ApiOperation(value = "删除帖子")
     @DeleteMapping("/remove")
-    public BaseResponse<Boolean> remove(@RequestParam Long articleId) {
-        if (!articlesService.remove(articleId)) {
+    public BaseResponse<Boolean> remove(@RequestParam Long articleId, HttpServletRequest request) {
+        if (!articlesService.remove(articleId, request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         return ResultUtil.success(true);
