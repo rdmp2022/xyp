@@ -41,6 +41,12 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
         }
         return list;
     }
+
+    @Override
+    public boolean deleteById(Long articleId) {
+        articleLabelMapper.delete(new QueryWrapper<ArticleLabel>().eq("article_id", articleId));
+        return true;
+    }
 }
 
 

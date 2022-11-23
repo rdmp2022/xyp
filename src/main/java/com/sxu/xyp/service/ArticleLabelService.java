@@ -13,4 +13,6 @@ import java.util.List;
 public interface ArticleLabelService extends IService<ArticleLabel> {
 
     List<String> getAllLabelID(Long id);
+
+    boolean deleteById(Long articleId);
 }

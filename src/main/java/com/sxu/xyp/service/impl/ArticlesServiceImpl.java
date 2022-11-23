@@ -81,7 +81,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         if (userService.toUserDTO(request).getUserId() != article.getUserId()) {
             throw new BusinessException(ErrorCode.LOGIN_ERROR, "没有权限");
         }
-        if (this.removeById(articleId) && articleLabelService.removeById(articleId) && favortiesService.deleteByArticleId(articleId)) {
+        if (this.removeById(articleId) && articleLabelService.deleteById(articleId)) {
             return true;
         }
         return false;
@@ -92,7 +92,6 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         List<Articles> articlesList = this.list();
         List<ArticleParam> articlesParamList = this.toArticleParams(articlesList, request);
         //Collections.reverse(articlesParamList);
-        this.sortByTime(articlesParamList);
         return articlesParamList;
     }
 
@@ -104,7 +103,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         for (Favorties favorties : favortieList) {
             articles.add(this.getById(favorties.getArticleId()));
         }
-        return toArticleParams(articles, request);
+        return  toArticleParams(articles, request);
     }
 
     @Override
@@ -129,7 +128,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         UserDTO user = userService.toUserDTO(request);
         List<Articles> articles = articlesMapper.selectList(new QueryWrapper<Articles>().eq("user_id", user.getUserId()));
         List<ArticleParam> myArticlesParam = this.toArticleParams(articles, request);
-        return myArticlesParam;
+        return sortByTime(myArticlesParam);
     }
 
     @Override
@@ -175,7 +174,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
                 return o2.getCreateTime().compareTo(o1.getCreateTime());
             }
         });
-        return null;
+        return articleParamList;
     }
 
     @Override
@@ -205,7 +204,8 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
             }
             articleParam.setTags(list);
         }
-        return myArticlesParam;
+        //按照时间排序
+        return  sortByTime(myArticlesParam);
     }
 
     @Override
