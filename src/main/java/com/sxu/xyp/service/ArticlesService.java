@@ -21,7 +21,7 @@ public interface ArticlesService extends IService<Articles> {
 
     Long add(AddArticleParams addArticleParams, UserDTO user);
 
-    Boolean remove(Long articleId, HttpServletRequest request);
+    Boolean delete(Long articleId, HttpServletRequest request);
 
     // 列出所有未展开的帖子的帖子
     List<ArticleParam> listAll(HttpServletRequest request);

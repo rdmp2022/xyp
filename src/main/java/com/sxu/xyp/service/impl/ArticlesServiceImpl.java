@@ -76,15 +76,12 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public Boolean remove(Long articleId, HttpServletRequest request) {
+    public Boolean delete(Long articleId, HttpServletRequest request) {
         Articles article = this.getById(articleId);
-        if (userService.toUserDTO(request).getUserId() != article.getUserId()) {
+        if (!Objects.equals(userService.toUserDTO(request).getUserId(), article.getUserId())) {
             throw new BusinessException(ErrorCode.LOGIN_ERROR, "没有权限");
         }
-        if (this.removeById(articleId) && articleLabelService.deleteById(articleId)) {
-            return true;
-        }
-        return false;
+        return this.removeById(articleId) && articleLabelService.deleteById(articleId);
     }
 
     @Override
