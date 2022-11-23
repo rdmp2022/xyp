@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -40,6 +41,8 @@ public interface ArticlesService extends IService<Articles> {
 
     // 根据时间排序
     List<ArticleParam> sortByTime(List<ArticleParam> articleParamList);
+
+    List<ArticleParam> findFavoriteArticlesByUserId(@RequestParam Long userId);
 
     List<ArticleParam> toArticleParams(List<Articles> articles,Long userId);
 

@@ -113,9 +113,15 @@ public class ArticleController {
         return ResultUtil.success(null);
     }
 
+    @ApiOperation(value = "指定用户id收藏的帖子")
+    @GetMapping("/findCollectById")
+    public BaseResponse<List<ArticleParam>> findFavoriteArticlesByUserId(@RequestParam Long userId) {
+        return ResultUtil.success(articlesService.findFavoriteArticlesByUserId(userId));
+    }
+
 
     @GetMapping("/findUser")
-    public BaseResponse<UserDTO> findUserByUserId(@RequestParam Long userId, HttpServletRequest request){
+    public BaseResponse<UserDTO> findUserByUserId(@RequestParam Long userId, HttpServletRequest request) {
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
@@ -124,8 +130,8 @@ public class ArticleController {
     }
 
     @GetMapping("/findArticle")
-    public BaseResponse<List<ArticleParam>> findArticlesByUserId(@RequestParam Long userId, HttpServletRequest request){
-        if (userId == null){
+    public BaseResponse<List<ArticleParam>> findArticlesByUserId(@RequestParam Long userId, HttpServletRequest request) {
+        if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         List<ArticleParam> articlesByUserId = articlesService.findArticlesByUserId(userId, request);

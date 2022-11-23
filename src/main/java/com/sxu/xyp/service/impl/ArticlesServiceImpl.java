@@ -18,12 +18,10 @@ import com.sxu.xyp.model.params.UpdateArticleParams;
 import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
-
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -121,7 +119,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         Articles article = this.getById(updateArticleParams.getArticleId());
         article.setContent(updateArticleParams.getContent());
         article.setSummary(updateArticleParams.getSummary());
-        articlesMapper.update(article, new QueryWrapper<Articles>().eq("article_id",updateArticleParams.getArticleId()));
+        articlesMapper.update(article, new QueryWrapper<Articles>().eq("article_id", updateArticleParams.getArticleId()));
         return article;
     }
 
@@ -177,6 +175,16 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
             }
         });
         return null;
+    }
+
+    @Override
+    public List<ArticleParam> findFavoriteArticlesByUserId(Long userId) {
+        ArrayList<Articles> articles = new ArrayList<>();
+        List<Favorties> favortieList = favortiesService.list(new QueryWrapper<Favorties>().eq("user_id", userId));
+        for (Favorties favorties : favortieList) {
+            articles.add(this.getById(favorties.getArticleId()));
+        }
+        return toArticleParams(articles, userId);
     }
 
 
