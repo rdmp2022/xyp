@@ -30,8 +30,6 @@ public class IndexController {
     @Resource
     BannerService bannerService;
 
-    @Resource
-    UserService userService;
 
     @ApiOperation(value = "获取首页轮播图")
     @GetMapping("/banner")

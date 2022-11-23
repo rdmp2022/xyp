@@ -6,12 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.UpdateArticleParams;
-import com.sxu.xyp.model.params.label.LabelParam;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author 86187
@@ -63,5 +60,5 @@ public interface ArticlesService extends IService<Articles> {
     List<ArticleParam> findArticlesByUserId(Long userId, HttpServletRequest request);
 
     // 通过标签展示帖子
-    List<ArticleParam> findArticleByLabel(LabelParam labelParam, HttpServletRequest request);
+    List<ArticleParam> findArticleByLabel(List<String> labelParams, HttpServletRequest request);
 }

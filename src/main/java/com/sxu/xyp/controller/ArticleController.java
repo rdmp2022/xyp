@@ -119,8 +119,8 @@ public class ArticleController {
 
     @ApiOperation(value = "通过标签查找文章")
     @GetMapping("/findArticleByLabel")
-    public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestBody LabelParam labelParam,HttpServletRequest request) {
-        return ResultUtil.success(articlesService.findArticleByLabel(labelParam, request));
+    public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestParam List<String> labelParams,HttpServletRequest request) {
+        return ResultUtil.success(articlesService.findArticleByLabel(labelParams, request));
     }
 
 

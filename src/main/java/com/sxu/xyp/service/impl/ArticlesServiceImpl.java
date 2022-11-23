@@ -81,7 +81,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         if (!Objects.equals(userService.toUserDTO(request).getUserId(), article.getUserId())) {
             throw new BusinessException(ErrorCode.LOGIN_ERROR, "没有权限");
         }
-        return this.removeById(articleId) && articleLabelService.deleteById(articleId);
+        return this.removeById(articleId) && articleLabelService.deleteById(articleId) && favortiesService.deleteByArticleId(articleId);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
             }
             articleParam.setTags(list);
         }
-        return myArticlesParam;
+        return sortByTime(myArticlesParam);
     }
 
     @Override
@@ -259,20 +259,14 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public List<ArticleParam> findArticleByLabel(LabelParam labelParam, HttpServletRequest request) {
-        Long labelId = Long.parseLong(labelParam.getValue());
-        if (labelId == 0) {
-            return this.listAll(request);
-        }
-        List<Long> articleIds = articleLabelService.getArticleId(Long.parseLong(labelParam.getValue()));
+    public List<ArticleParam> findArticleByLabel(List<String> labelParams, HttpServletRequest request) {
+        List<Long> articleIds = articleLabelService.getArticleId(labelParams);
         ArrayList<Articles> articles = new ArrayList<>();
         for (Long articleId : articleIds) {
             articles.add(this.getById(articleId));
         }
         return this.toArticleParams(articles, request);
     }
-
-
 }
 
 

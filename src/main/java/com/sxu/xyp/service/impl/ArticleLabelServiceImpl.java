@@ -4,24 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.domain.Labels;
+import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.mapper.ArticleLabelMapper;
 import com.sxu.xyp.service.LabelsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
-* @author 86187
-* @description 针对表【article_label(帖子_标签表)】的数据库操作Service实现
-* @createDate 2022-11-14 22:06:22
-*/
+ * @author 86187
+ * @description 针对表【article_label(帖子_标签表)】的数据库操作Service实现
+ * @createDate 2022-11-14 22:06:22
+ */
 @Service
-public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel> implements ArticleLabelService{
+public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel> implements ArticleLabelService {
 
     @Resource
     ArticleLabelMapper articleLabelMapper;
@@ -35,7 +33,7 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
         List<ArticleLabel> articleLabels = articleLabelMapper.selectBatchIds(Collections.singletonList(id));
         for (ArticleLabel articleLabel : articleLabels) {
             QueryWrapper<Labels> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("label_id",articleLabel.getLabelId());
+            queryWrapper.eq("label_id", articleLabel.getLabelId());
             Labels label = labelsService.getOne(queryWrapper);
             list.add(label.getLabelName());
         }
@@ -49,13 +47,22 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
     }
 
     @Override
-    public List<Long> getArticleId(Long labelId) {
-        List<ArticleLabel> articleIds = articleLabelMapper.selectList(new QueryWrapper<ArticleLabel>().eq("label_id", labelId));
-        ArrayList<Long> list = new ArrayList<>();
-        for (ArticleLabel articleId : articleIds) {
-            list.add(articleId.getArticleId());
+    public List<Long> getArticleId(List<String> labelParams) {
+
+        HashSet<Long> set = new HashSet<>();
+        for (String labelParam : labelParams) {
+            List<ArticleLabel> articleIds = new ArrayList<>();
+            Long id = Long.parseLong(labelParam);
+            if (id == 0) {
+                articleIds = articleLabelMapper.selectList(null);
+            } else {
+                articleIds = articleLabelMapper.selectList(new QueryWrapper<ArticleLabel>().eq("label_id", id));
+            }
+            for (ArticleLabel articleId : articleIds) {
+                set.add(articleId.getArticleId());
+            }
         }
-        return list;
+        return new ArrayList<Long>(set);
     }
 
 
