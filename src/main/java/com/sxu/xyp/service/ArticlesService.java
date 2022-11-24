@@ -1,11 +1,12 @@
 package com.sxu.xyp.service;
 
-import com.sxu.xyp.model.params.AddArticleParams;
+import com.sxu.xyp.model.params.article.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sxu.xyp.model.dto.UserDTO;
-import com.sxu.xyp.model.params.ArticleParam;
-import com.sxu.xyp.model.params.UpdateArticleParams;
+import com.sxu.xyp.model.params.article.ArticleParam;
+import com.sxu.xyp.model.params.article.UpdateArticleParams;
+import com.sxu.xyp.model.params.label.LableParams;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -60,5 +61,5 @@ public interface ArticlesService extends IService<Articles> {
     List<ArticleParam> findArticlesByUserId(Long userId, HttpServletRequest request);
 
     // 通过标签展示帖子
-    List<ArticleParam> findArticleByLabel(List<String> labelParams, HttpServletRequest request);
+    List<ArticleParam> findArticleByLabel(LableParams lableParams, HttpServletRequest request);
 }

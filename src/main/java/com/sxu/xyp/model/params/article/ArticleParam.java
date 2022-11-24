@@ -1,4 +1,4 @@
-package com.sxu.xyp.model.params;
+package com.sxu.xyp.model.params.article;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

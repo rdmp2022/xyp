@@ -6,11 +6,11 @@ import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.common.ResultUtil;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.dto.UserDTO;
-import com.sxu.xyp.model.params.AddArticleParams;
+import com.sxu.xyp.model.params.article.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
-import com.sxu.xyp.model.params.ArticleParam;
-import com.sxu.xyp.model.params.UpdateArticleParams;
-import com.sxu.xyp.model.params.label.LabelParam;
+import com.sxu.xyp.model.params.article.ArticleParam;
+import com.sxu.xyp.model.params.article.UpdateArticleParams;
+import com.sxu.xyp.model.params.label.LableParams;
 import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @description: TODO
@@ -119,8 +118,9 @@ public class ArticleController {
 
     @ApiOperation(value = "通过标签查找文章")
     @GetMapping("/findArticleByLabel")
-    public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestParam List<String> labelParams,HttpServletRequest request) {
-        return ResultUtil.success(articlesService.findArticleByLabel(labelParams, request));
+    public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestBody LableParams lableParams, HttpServletRequest request) {
+        System.out.println(lableParams);
+        return ResultUtil.success(articlesService.findArticleByLabel(lableParams, request));
     }
 
 

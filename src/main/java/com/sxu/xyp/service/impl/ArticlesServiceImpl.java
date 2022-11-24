@@ -1,7 +1,6 @@
 package com.sxu.xyp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,13 +8,14 @@ import com.sxu.xyp.common.ErrorCode;
 import com.sxu.xyp.exception.BusinessException;
 import com.sxu.xyp.model.domain.Favorties;
 import com.sxu.xyp.model.domain.User;
-import com.sxu.xyp.model.params.AddArticleParams;
+import com.sxu.xyp.model.params.article.AddArticleParams;
 import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.ArticleLabel;
 import com.sxu.xyp.model.dto.UserDTO;
-import com.sxu.xyp.model.params.ArticleParam;
-import com.sxu.xyp.model.params.UpdateArticleParams;
+import com.sxu.xyp.model.params.article.ArticleParam;
+import com.sxu.xyp.model.params.article.UpdateArticleParams;
 import com.sxu.xyp.model.params.label.LabelParam;
+import com.sxu.xyp.model.params.label.LableParams;
 import com.sxu.xyp.service.*;
 import com.sxu.xyp.mapper.ArticlesMapper;
 import org.springframework.stereotype.Service;
@@ -259,8 +259,8 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public List<ArticleParam> findArticleByLabel(List<String> labelParams, HttpServletRequest request) {
-        List<Long> articleIds = articleLabelService.getArticleId(labelParams);
+    public List<ArticleParam> findArticleByLabel(LableParams lableParams, HttpServletRequest request) {
+        List<Long> articleIds = articleLabelService.getArticleId(lableParams);
         ArrayList<Articles> articles = new ArrayList<>();
         for (Long articleId : articleIds) {
             articles.add(this.getById(articleId));

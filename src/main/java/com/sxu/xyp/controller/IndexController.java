@@ -5,6 +5,7 @@ import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
 
 import com.sxu.xyp.model.domain.Banner;
+import com.sxu.xyp.model.dto.UserDTO;
 import com.sxu.xyp.model.params.user.UserIndexParam;
 import com.sxu.xyp.service.BannerService;
 import com.sxu.xyp.service.UserService;
@@ -62,7 +63,7 @@ public class IndexController {
 
     @ApiOperation(value = "作者榜单")
     @GetMapping("/userList")
-    public BaseResponse<List<UserIndexParam>> userList(){
+    public BaseResponse<List<UserDTO>> userList(){
         // 文章收藏数加起来
 
         return ResultUtil.success(null);

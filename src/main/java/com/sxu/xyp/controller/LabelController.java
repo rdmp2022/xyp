@@ -2,8 +2,6 @@ package com.sxu.xyp.controller;
 
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
-import com.sxu.xyp.model.domain.Labels;
-import com.sxu.xyp.model.params.ArticleParam;
 import com.sxu.xyp.model.params.label.LabelParam;
 import com.sxu.xyp.service.LabelsService;
 import io.swagger.annotations.Api;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

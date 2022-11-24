@@ -3,10 +3,13 @@ package com.sxu.xyp.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sxu.xyp.model.domain.ArticleLabel;
+import com.sxu.xyp.model.domain.Articles;
 import com.sxu.xyp.model.domain.Labels;
 import com.sxu.xyp.model.params.label.LabelParam;
+import com.sxu.xyp.model.params.label.LableParams;
 import com.sxu.xyp.service.ArticleLabelService;
 import com.sxu.xyp.mapper.ArticleLabelMapper;
+import com.sxu.xyp.service.ArticlesService;
 import com.sxu.xyp.service.LabelsService;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,9 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
 
     @Resource
     LabelsService labelsService;
+
+    @Resource
+    ArticlesService articlesService;
 
     @Override
     public List<String> getAllLabelID(Long id) {
@@ -47,25 +53,35 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
     }
 
     @Override
-    public List<Long> getArticleId(List<String> labelParams) {
+    public List<Long> getArticleId(LableParams lableParams) {
 
         HashSet<Long> set = new HashSet<>();
-        for (String labelParam : labelParams) {
-            List<ArticleLabel> articleIds = new ArrayList<>();
-            Long id = Long.parseLong(labelParam);
-            if (id == 0) {
-                articleIds = articleLabelMapper.selectList(null);
-            } else {
-                articleIds = articleLabelMapper.selectList(new QueryWrapper<ArticleLabel>().eq("label_id", id));
+        List<String> values = lableParams.getValues();
+        List<ArticleLabel> list = this.list();
+        for (ArticleLabel articleLabel : list) {
+            set.add(articleLabel.getArticleId());
+        }
+        ArrayList<Long> res = new ArrayList<>();
+        for (Long id : set) {
+            List<ArticleLabel> articleLabels = articleLabelMapper.selectBatchIds(Collections.singleton(id));
+            int flag = values.size();
+            for (String value : values) {
+                Long labelId = Long.parseLong(value);
+                for (ArticleLabel articleLabel : articleLabels) {
+                    if (Objects.equals(labelId,articleLabel.getLabelId())) {
+                        flag--;
+                    }
+                }
             }
-            for (ArticleLabel articleId : articleIds) {
-                set.add(articleId.getArticleId());
+            if (flag == 0) {
+                res.add(id);
             }
         }
-        return new ArrayList<Long>(set);
+        System.out.println("----------------------------------------------------------");
+        System.out.println(res.size());
+        System.out.println("----------------------------------------------------------");
+        return res;
     }
-
-
 }
 
 
