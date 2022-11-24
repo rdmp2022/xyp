@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxu.xyp.mapper.CampusInformationMapper">
+
+    <resultMap id="BaseResultMap" type="com.sxu.xyp.model.domain.CampusInformation">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="adminId" column="admin_id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="summary" column="summary" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="coverPhoto" column="cover_photo" jdbcType="VARCHAR"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,admin_id,title,
+        summary,create_time,update_time,
+        content,cover_photo,is_deleted
+    </sql>
+</mapper>

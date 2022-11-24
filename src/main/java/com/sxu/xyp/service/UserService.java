@@ -29,6 +29,10 @@ public interface UserService extends IService<User> {
 
     UserDTO currentUser(HttpServletRequest request);
 
+    Boolean isAdmin(HttpServletRequest request);
+
+    Boolean isAdmin(Integer userId);
+
 //    User getSafetyUser(User user);
 
 }

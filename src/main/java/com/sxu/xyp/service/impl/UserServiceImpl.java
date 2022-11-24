@@ -262,10 +262,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @param request 含token的请求
      * @return 返回true-管理员
      */
-    public boolean isAdmin(HttpServletRequest request){
+    @Override
+    public Boolean isAdmin(HttpServletRequest request){
         UserDTO userDTO = toUserDTO(request);
         Integer userRole = userDTO.getUserRole();
         return userRole == ADMIN_ROLE;
+    }
+
+    @Override
+    public Boolean isAdmin(Integer userId) {
+        User user = this.getById(userId);
+        return user.getUserRole() == ADMIN_ROLE;
     }
 
 
