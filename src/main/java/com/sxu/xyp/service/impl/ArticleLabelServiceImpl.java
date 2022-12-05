@@ -20,7 +20,7 @@ import java.util.*;
  * @author 86187
  * @description 针对表【article_label(帖子_标签表)】的数据库操作Service实现
  * @createDate 2022-11-14 22:06:22
- */
+ */ 
 @Service
 public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, ArticleLabel> implements ArticleLabelService {
 
@@ -77,9 +77,7 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelMapper, Art
                 res.add(id);
             }
         }
-        System.out.println("----------------------------------------------------------");
         System.out.println(res.size());
-        System.out.println("----------------------------------------------------------");
         return res;
     }
 }

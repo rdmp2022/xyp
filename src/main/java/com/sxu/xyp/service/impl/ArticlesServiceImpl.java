@@ -175,13 +175,13 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     }
 
     @Override
-    public List<ArticleParam> findFavoriteArticlesByUserId(Long userId) {
+    public List<ArticleParam> findFavoriteArticlesByUserId(Long userId, HttpServletRequest request) {
         ArrayList<Articles> articles = new ArrayList<>();
         List<Favorties> favortieList = favortiesService.list(new QueryWrapper<Favorties>().eq("user_id", userId));
         for (Favorties favorties : favortieList) {
             articles.add(this.getById(favorties.getArticleId()));
         }
-        return toArticleParams(articles, userId);
+        return this.toArticleParams(articles, request);
     }
 
 
@@ -254,8 +254,7 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         QueryWrapper<Articles> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         List<Articles> articlesList = this.list(queryWrapper);
-        //List<ArticleParam> articleParamsList = BeanUtil.copyToList(articlesList, ArticleParam.class);
-        return this.toArticleParams(articlesList, userId);
+        return this.toArticleParams(articlesList, request);
     }
 
     @Override

@@ -3,10 +3,8 @@ package com.sxu.xyp.controller;
 
 import com.sxu.xyp.common.BaseResponse;
 import com.sxu.xyp.common.ResultUtil;
-
 import com.sxu.xyp.model.domain.Banner;
 import com.sxu.xyp.model.dto.UserDTO;
-import com.sxu.xyp.model.params.user.UserIndexParam;
 import com.sxu.xyp.service.BannerService;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;

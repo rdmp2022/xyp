@@ -11,7 +11,6 @@ import com.sxu.xyp.service.CampusInformationService;
 import com.sxu.xyp.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

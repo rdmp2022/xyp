@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 * @createDate 2022-11-14 21:58:30
 */
 public interface FavortiesService extends IService<Favorties> {
+
     Boolean collect(Long articleId, HttpServletRequest request);
 
     Boolean UnCollect(Long articleId, HttpServletRequest request);

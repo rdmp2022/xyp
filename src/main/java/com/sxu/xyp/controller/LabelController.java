@@ -34,5 +34,4 @@ public class LabelController {
         return ResultUtil.success(labelsService.labelList());
     }
 
-
 }

@@ -15,7 +15,6 @@ import com.sxu.xyp.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,7 +35,6 @@ public class ArticleController {
 
     @Resource
     UserService userService;
-
 
     @Resource
     FavortiesService favortiesService;
@@ -104,26 +102,19 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/search")
-    public BaseResponse<Articles> search() {
-
-        return ResultUtil.success(null);
-    }
-
     @ApiOperation(value = "指定用户id收藏的帖子")
     @GetMapping("/findCollectById")
-    public BaseResponse<List<ArticleParam>> findFavoriteArticlesByUserId(@RequestParam Long userId) {
-        return ResultUtil.success(articlesService.findFavoriteArticlesByUserId(userId));
+    public BaseResponse<List<ArticleParam>> findFavoriteArticlesByUserId(@RequestParam Long userId,HttpServletRequest request) {
+        return ResultUtil.success(articlesService.findFavoriteArticlesByUserId(userId, request));
     }
 
     @ApiOperation(value = "通过标签查找文章")
     @PostMapping("/findArticleByLabel")
     public BaseResponse<List<ArticleParam>> findArticleByLabel(@RequestBody LableParams lableParams, HttpServletRequest request) {
-        System.out.println(lableParams);
         return ResultUtil.success(articlesService.findArticleByLabel(lableParams, request));
     }
 
-
+    @ApiOperation(value = "指定用户id的个人信息")
     @GetMapping("/findUser")
     public BaseResponse<UserDTO> findUserByUserId(@RequestParam Long userId, HttpServletRequest request) {
         if (userId == null) {
@@ -140,5 +131,10 @@ public class ArticleController {
         }
         List<ArticleParam> articlesByUserId = articlesService.findArticlesByUserId(userId, request);
         return ResultUtil.success(articlesByUserId);
+    }
+
+    @GetMapping("/search")
+    public BaseResponse<Articles> search() {
+        return ResultUtil.success(null);
     }
 }

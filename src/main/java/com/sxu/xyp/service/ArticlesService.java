@@ -46,7 +46,7 @@ public interface ArticlesService extends IService<Articles> {
     List<ArticleParam> sortByTime(List<ArticleParam> articleParamList);
 
 
-    List<ArticleParam> findFavoriteArticlesByUserId(@RequestParam Long userId);
+    List<ArticleParam> findFavoriteArticlesByUserId(@RequestParam Long userId, HttpServletRequest request);
 
 
     List<ArticleParam> toArticleParams(List<Articles> articles,Long userId);
